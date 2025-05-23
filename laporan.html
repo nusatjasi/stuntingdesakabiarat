@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Penimbangan Balita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: var(--dark);
+            transition: all 0.3s;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            border-right: 1px solid #e9ecef;
+            z-index: 100;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-collapsed .sidebar-header h1,
+        .sidebar-collapsed .sidebar-menu li a span {
+            display: none;
+        }
+        
+        .sidebar-collapsed .sidebar-menu li a {
+            justify-content: center;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .sidebar-header img {
+            width: 80px;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: var(--dark);
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu li {
+            list-style: none;
+            padding: 12px 20px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            margin: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .sidebar-menu li:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-menu li.active {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .sidebar-menu a {
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        /* Rainbow Text Animation */
+        @keyframes rainbowText {
+            0% { color: #ff0000; }
+            14% { color: #ff7f00; }
+            28% { color: #ffff00; }
+            42% { color: #00ff00; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #9400d3; }
+            100% { color: #ff0000; }
+        }
+        
+        .sidebar-menu li:hover a span {
+            animation: rainbowText 2s infinite;
+        }
+        
+        /* Icon Colors */
+        .sidebar-menu li:nth-child(1) i { color: var(--secondary); }
+        .sidebar-menu li:nth-child(2) i { color: #20c997; }
+        .sidebar-menu li:nth-child(3) i { color: #fd7e14; }
+        .sidebar-menu li:nth-child(4) i { color: #6f42c1; }
+        .sidebar-menu li:nth-child(5) i { color: var(--danger); }
+        .sidebar-menu li:nth-child(6) i { color: var(--info); }
+        .sidebar-menu li:nth-child(7) i { color: var(--warning); }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+        
+        .main-content-expanded {
+            margin-left: 80px;
+        }
+        
+        /* Fixed header when scrolling */
+        .header-container {
+            position: sticky;
+            top: 0;
+            background: #f5f7fa;
+            z-index: 99;
+            padding-bottom: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .nav-link {
+            cursor: pointer;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+        
+        .running-text {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px 0;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .running-text-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: runningText 15s linear infinite;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        @keyframes runningText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        /* Data Tables */
+        .data-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .table-container::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 5px;
+        }
+        
+        .view-btn {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Action buttons container */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .print-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .print-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-normal {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-kurang {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-stunting {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+        
+        .modal-body {
+            padding: 10px 0;
+            max-height: calc(80vh - 150px);
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+        
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-btn:hover {
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .save-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Notification Modal */
+        .notification-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        
+        .notification-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: notificationFadeIn 0.3s;
+        }
+        
+        @keyframes notificationFadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: #28a745;
+            position: relative;
+            margin-bottom: 20px;
+            animation: checkmarkScale 0.5s;
+        }
+        
+        @keyframes checkmarkScale {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .checkmark:after {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 14px;
+            width: 25px;
+            height: 45px;
+            border: solid white;
+            border-width: 0 5px 5px 0;
+            transform: rotate(45deg);
+        }
+        
+        .notification-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .confirm-modal .notification-content {
+            max-width: 400px;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .confirm-btn {
+            padding: 8px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .confirm-yes {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .confirm-no {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Loading Animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.8);
+        }
+        
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Month Filter */
+        .month-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .month-filter select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            min-width: 150px;
+        }
+        
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .data-container, .data-container * {
+                visibility: visible;
+            }
+            .data-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            .action-buttons, .month-filter, .pagination {
+                display: none !important;
+            }
+            table {
+                width: 100% !important;
+            }
+            th, td {
+                padding: 8px !important;
+                font-size: 12px !important;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header h1,
+            .sidebar-menu li a span {
+                display: none;
+            }
+            
+            .sidebar-menu li a {
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="logo.png" alt="Logo Posyandu">
+                <h1>Posyandu NIFMASBULUR 1</h1>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li data-target="dashboard">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Beranda</span>
+                    </a>
+                </li>
+                <li data-target="data-anak">
+                    <a href="anakbalita.html">
+                        <i class="fas fa-child"></i>
+                        <span>Data Anak Balita</span>
+                    </a>
+                </li>
+                <li data-target="penimbangan">
+                    <a href="penimbangan.html">
+                        <i class="fas fa-weight"></i>
+                        <span>Penimbangan</span>
+                    </a>
+                </li>
+                <li data-target="imunisasi">
+                    <a href="#">
+                        <i class="fas fa-syringe"></i>
+                        <span>Imunisasi</span>
+                    </a>
+                </li>
+                <li data-target="vitamin">
+                    <a href="#">
+                        <i class="fas fa-pills"></i>
+                        <span>Vitamin</span>
+                    </a>
+                </li>
+                <li class="active" data-target="laporan">
+                    <a href="laporan.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Laporan</span>
+                    </a>
+                </li>
+                <li data-target="pengaturan">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="login.html" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="header-container">
+                <div class="header">
+                    <div class="header-top">
+                        <div>
+                            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                            <h2 style="display: inline-block; margin-left: 10px;">Laporan Penimbangan Balita</h2>
+                        </div>
+                        <div class="user-info">
+                            <img src="user.png" alt="User">
+                            <span>Admin Posyandu</span>
+                            <button class="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Keluar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="running-text">
+                        <div class="running-text-content">
+                            Selamat datang di Sistem Laporan Posyandu - Aplikasi untuk memudahkan pengelolaan laporan penimbangan balita
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Content -->
+            <div class="data-container">
+                <div class="action-buttons">
+                    <button id="printBtn" class="print-btn">
+                        <i class="fas fa-print"></i> Cetak Laporan
+                    </button>
+                </div>
+                
+                <div class="month-filter">
+                    <select id="yearFilter">
+                        <option value="">Pilih Tahun</option>
+                        <option value="2023">2023</option>
+                        <option value="2024" selected>2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                    <select id="monthFilter">
+                        <option value="">Semua Bulan</option>
+                        <option value="januari">Januari</option>
+                        <option value="februari">Februari</option>
+                        <option value="maret">Maret</option>
+                        <option value="april">April</option>
+                        <option value="mei">Mei</option>
+                        <option value="juni">Juni</option>
+                        <option value="juli">Juli</option>
+                        <option value="agustus">Agustus</option>
+                        <option value="september">September</option>
+                        <option value="oktober">Oktober</option>
+                        <option value="november">November</option>
+                        <option value="desember">Desember</option>
+                    </select>
+                </div>
+                
+                <div class="table-container">
+                    <table id="laporanTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Anak</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Usia</th>
+                                <th>Anak Ke-</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Nama Orang Tua</th>
+                                <th>Berat Badan (kg)</th>
+                                <th>Tinggi Badan (cm)</th>
+                                <th>Status Gizi</th>
+                                <th>Bulan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button class="page-btn">Previous</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span class="page-info">Halaman 1 dari 3</span>
+                    <button class="page-btn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Data Modal -->
+    <div id="editDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Data Laporan</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editDataForm">
+                    <input type="hidden" id="editId">
+                    <input type="hidden" id="editBulan">
+                    
+                    <div class="form-group">
+                        <label for="editNamaAnak">Nama Anak</label>
+                        <input type="text" id="editNamaAnak" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTglLahir">Tanggal Lahir</label>
+                        <input type="text" id="editTglLahir" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editJenisKelamin">Jenis Kelamin</label>
+                        <input type="text" id="editJenisKelamin" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editNamaOrtu">Nama Orang Tua</label>
+                        <input type="text" id="editNamaOrtu" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editAnakKe">Anak Ke-</label>
+                        <input type="text" id="editAnakKe" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editUsia">Usia</label>
+                        <input type="text" id="editUsia" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editBeratBadan">Berat Badan (kg)</label>
+                        <input type="number" id="editBeratBadan" step="0.1" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editTinggiBadan">Tinggi Badan (cm)</label>
+                        <input type="number" id="editTinggiBadan" step="0.1" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editStatusGizi">Status Gizi</label>
+                        <select id="editStatusGizi" required>
+                            <option value="">Pilih Status Gizi</option>
+                            <option value="normal">Normal</option>
+                            <option value="kurang">Gizi Kurang</option>
+                            <option value="stunting">Stunting</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
+                        <button type="submit" class="action-btn save-btn">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="notification-modal">
+        <div class="notification-content">
+            <div class="checkmark"></div>
+            <div class="notification-text" id="notificationText">Data berhasil diperbarui</div>
+            <button class="action-btn cancel-btn close-notification-btn">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirmModal" class="notification-modal confirm-modal">
+        <div class="notification-content">
+            <div style="font-size: 24px; margin-bottom: 20px; color: var(--danger);">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="notification-text">Apakah Anda yakin ingin menghapus data ini?</div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-yes" id="confirmYes">Ya</button>
+                <button class="confirm-btn confirm-no" id="confirmNo">Tidak</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // Sample data from penimbangan.html (in a real app, this would come from a database)
+        let laporanData = [
+            {
+                id: '1',
+                nik: '1234567890123456',
+                namaAnak: 'Budi Santoso',
+                tglLahir: '15/01/2020',
+                usia: '4 tahun 5 bulan',
+                anakKe: '1',
+                jenisKelamin: 'Laki-laki',
+                namaOrtu: 'Andi Wijaya',
+                beratBadan: '15.5',
+                tinggiBadan: '95.2',
+                statusGizi: 'normal',
+                bulan: 'januari',
+                tahun: '2024'
+            },
+            {
+                id: '2',
+                nik: '2345678901234567',
+                namaAnak: 'Ani Putri',
+                tglLahir: '22/05/2019',
+                usia: '5 tahun 1 bulan',
+                anakKe: '2',
+                jenisKelamin: 'Perempuan',
+                namaOrtu: 'Budi Hartono',
+                beratBadan: '14.8',
+                tinggiBadan: '92.5',
+                statusGizi: 'normal',
+                bulan: 'januari',
+                tahun: '2024'
+            },
+            {
+                id: '3',
+                nik: '3456789012345678',
+                namaAnak: 'Cici Permata',
+                tglLahir: '10/11/2021',
+                usia: '2 tahun 7 bulan',
+                anakKe: '1',
+                jenisKelamin: 'Perempuan',
+                namaOrtu: 'Dedi Kurniawan',
+                beratBadan: '12.3',
+                tinggiBadan: '85.0',
+                statusGizi: 'normal',
+                bulan: 'februari',
+                tahun: '2024'
+            },
+            {
+                id: '4',
+                nik: '4567890123456789',
+                namaAnak: 'Dodi Pratama',
+                tglLahir: '03/03/2020',
+                usia: '4 tahun 3 bulan',
+                anakKe: '3',
+                jenisKelamin: 'Laki-laki',
+                namaOrtu: 'Eka Putra',
+                beratBadan: '16.2',
+                tinggiBadan: '97.5',
+                statusGizi: 'normal',
+                bulan: 'februari',
+                tahun: '2024'
+            },
+            {
+                id: '5',
+                nik: '5678901234567890',
+                namaAnak: 'Eva Susanti',
+                tglLahir: '18/07/2019',
+                usia: '5 tahun 0 bulan',
+                anakKe: '2',
+                jenisKelamin: 'Perempuan',
+                namaOrtu: 'Fajar Nugraha',
+                beratBadan: '15.0',
+                tinggiBadan: '94.0',
+                statusGizi: 'normal',
+                bulan: 'maret',
+                tahun: '2024'
+            },
+            {
+                id: '6',
+                nik: '1234567890123456',
+                namaAnak: 'Budi Santoso',
+                tglLahir: '15/01/2020',
+                usia: '4 tahun 6 bulan',
+                anakKe: '1',
+                jenisKelamin: 'Laki-laki',
+                namaOrtu: 'Andi Wijaya',
+                beratBadan: '15.7',
+                tinggiBadan: '95.5',
+                statusGizi: 'normal',
+                bulan: 'maret',
+                tahun: '2024'
+            },
+            {
+                id: '7',
+                nik: '2345678901234567',
+                namaAnak: 'Ani Putri',
+                tglLahir: '22/05/2019',
+                usia: '5 tahun 2 bulan',
+                anakKe: '2',
+                jenisKelamin: 'Perempuan',
+                namaOrtu: 'Budi Hartono',
+                beratBadan: '15.0',
+                tinggiBadan: '93.0',
+                statusGizi: 'normal',
+                bulan: 'april',
+                tahun: '2024'
+            },
+            {
+                id: '8',
+                nik: '3456789012345678',
+                namaAnak: 'Cici Permata',
+                tglLahir: '10/11/2021',
+                usia: '2 tahun 8 bulan',
+                anakKe: '1',
+                jenisKelamin: 'Perempuan',
+                namaOrtu: 'Dedi Kurniawan',
+                beratBadan: '12.5',
+                tinggiBadan: '85.5',
+                statusGizi: 'normal',
+                bulan: 'april',
+                tahun: '2024'
+            },
+            {
+                id: '9',
+                nik: '4567890123456789',
+                namaAnak: 'Dodi Pratama',
+                tglLahir: '03/03/2020',
+                usia: '4 tahun 4 bulan',
+                anakKe: '3',
+                jenisKelamin: 'Laki-laki',
+                namaOrtu: 'Eka Putra',
+                beratBadan: '16.5',
+                tinggiBadan: '98.0',
+                statusGizi: 'normal',
+                bulan: 'mei',
+                tahun: '2024'
+            },
+            {
+                id: '10',
+                nik: '5678901234567890',
+                namaAnak: 'Eva Susanti',
+                tglLahir: '18/07/2019',
+                usia: '5 tahun 1 bulan',
+                anakKe: '2',
+                jenisKelamin: 'Perempuan',
+                namaOrtu: 'Fajar Nugraha',
+                beratBadan: '15.2',
+                tinggiBadan: '94.5',
+                statusGizi: 'normal',
+                bulan: 'mei',
+                tahun: '2024'
+            }
+        ];
+
+        // Toggle sidebar
+        document.querySelector('.nav-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('main-content-expanded');
+        });
+        
+        // Logout button functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if(confirm('Apakah Anda yakin ingin keluar?')) {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Rainbow text animation for menu items
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const textSpan = this.querySelector('a span');
+                if (textSpan) {
+                    textSpan.style.animation = 'rainbowText 2s infinite';
+                }
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                const textSpan = this.querySelector('a span');
+                if (textSpan) {
+                    textSpan.style.animation = 'none';
+                }
+            });
+        });
+        
+        // Modal functionality
+        const editDataModal = document.getElementById('editDataModal');
+        const notificationModal = document.getElementById('notificationModal');
+        const confirmModal = document.getElementById('confirmModal');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const closeBtns = document.querySelectorAll('.close-btn, .close-modal-btn, .close-notification-btn');
+        const confirmYesBtn = document.getElementById('confirmYes');
+        const confirmNoBtn = document.getElementById('confirmNo');
+        const printBtn = document.getElementById('printBtn');
+        const yearFilter = document.getElementById('yearFilter');
+        const monthFilter = document.getElementById('monthFilter');
+        
+        // Filter data based on year and month
+        function filterData() {
+            const year = yearFilter.value;
+            const month = monthFilter.value;
+            
+            let filteredData = laporanData;
+            
+            if (year) {
+                filteredData = filteredData.filter(item => item.tahun === year);
+            }
+            
+            if (month) {
+                filteredData = filteredData.filter(item => item.bulan === month);
+            }
+            
+            renderLaporanData(filteredData);
+        }
+        
+        // Render laporan data to table
+        function renderLaporanData(data) {
+            const tbody = document.querySelector('#laporanTable tbody');
+            tbody.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                // Get status badge class
+                let statusClass = '';
+                let statusText = '';
+                switch(item.statusGizi) {
+                    case 'normal':
+                        statusClass = 'status-normal';
+                        statusText = 'Normal';
+                        break;
+                    case 'kurang':
+                        statusClass = 'status-kurang';
+                        statusText = 'Gizi Kurang';
+                        break;
+                    case 'stunting':
+                        statusClass = 'status-stunting';
+                        statusText = 'Stunting';
+                        break;
+                }
+                
+                // Format bulan name
+                const bulanName = item.bulan.charAt(0).toUpperCase() + item.bulan.slice(1);
+                
+                const row = document.createElement('tr');
+                row.dataset.id = item.id;
+                row.dataset.bulan = item.bulan;
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.namaAnak}</td>
+                    <td>${item.tglLahir}</td>
+                    <td>${item.usia}</td>
+                    <td>${item.anakKe}</td>
+                    <td>${item.jenisKelamin}</td>
+                    <td>${item.namaOrtu}</td>
+                    <td>${item.beratBadan}</td>
+                    <td>${item.tinggiBadan}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>${bulanName}</td>
+                    <td>
+                        <button class="action-btn edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+                
+                // Add event listeners to buttons
+                setupEditButton(row.querySelector('.edit-btn'));
+                setupDeleteButton(row.querySelector('.delete-btn'));
+            });
+        }
+        
+        // Setup edit button functionality
+        function setupEditButton(btn) {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                
+                document.getElementById('editId').value = row.dataset.id;
+                document.getElementById('editBulan').value = row.dataset.bulan;
+                document.getElementById('editNamaAnak').value = row.cells[1].textContent;
+                document.getElementById('editTglLahir').value = row.cells[2].textContent;
+                document.getElementById('editJenisKelamin').value = row.cells[5].textContent;
+                document.getElementById('editNamaOrtu').value = row.cells[6].textContent;
+                document.getElementById('editAnakKe').value = row.cells[4].textContent;
+                document.getElementById('editUsia').value = row.cells[3].textContent;
+                document.getElementById('editBeratBadan').value = row.cells[7].textContent;
+                document.getElementById('editTinggiBadan').value = row.cells[8].textContent;
+                
+                // Set status gizi
+                const statusBadge = row.cells[9].querySelector('.status-badge');
+                const statusClass = Array.from(statusBadge.classList).find(cls => cls.startsWith('status-'));
+                const statusValue = statusClass ? statusClass.replace('status-', '') : '';
+                document.getElementById('editStatusGizi').value = statusValue;
+                
+                editDataModal.style.display = 'block';
+            });
+        }
+        
+        // Setup delete button functionality
+        function setupDeleteButton(btn) {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                confirmModal.style.display = 'block';
+                
+                // Store the row to delete if confirmed
+                confirmYesBtn.onclick = function() {
+                    confirmModal.style.display = 'none';
+                    loadingOverlay.style.display = 'block';
+                    
+                    // Simulate loading
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        
+                        // Remove from data array
+                        const id = row.dataset.id;
+                        laporanData = laporanData.filter(item => item.id !== id);
+                        
+                        // Re-render table
+                        filterData();
+                        
+                        // Show success notification
+                        document.getElementById('notificationText').textContent = 'Data berhasil dihapus';
+                        notificationModal.style.display = 'block';
+                    }, 1000);
+                };
+            });
+        }
+        
+        // Form submission for edit data
+        document.getElementById('editDataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            loadingOverlay.style.display = 'block';
+            
+            // Simulate loading and then show success notification
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                
+                // Get form values
+                const id = document.getElementById('editId').value;
+                const bulan = document.getElementById('editBulan').value;
+                const beratBadan = document.getElementById('editBeratBadan').value;
+                const tinggiBadan = document.getElementById('editTinggiBadan').value;
+                const statusGizi = document.getElementById('editStatusGizi').value;
+                
+                // Find and update the data
+                const dataIndex = laporanData.findIndex(item => item.id === id && item.bulan === bulan);
+                if (dataIndex !== -1) {
+                    laporanData[dataIndex].beratBadan = beratBadan;
+                    laporanData[dataIndex].tinggiBadan = tinggiBadan;
+                    laporanData[dataIndex].statusGizi = statusGizi;
+                }
+                
+                // Re-render table
+                filterData();
+                
+                // Close modal
+                editDataModal.style.display = 'none';
+                
+                // Show success notification
+                document.getElementById('notificationText').textContent = 'Data berhasil diperbarui';
+                notificationModal.style.display = 'block';
+            }, 1000);
+        });
+        
+        // Confirm No button
+        confirmNoBtn.addEventListener('click', function() {
+            confirmModal.style.display = 'none';
+        });
+        
+        // Close modals
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                editDataModal.style.display = 'none';
+                notificationModal.style.display = 'none';
+                confirmModal.style.display = 'none';
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === editDataModal) {
+                editDataModal.style.display = 'none';
+            }
+            if (event.target === notificationModal) {
+                notificationModal.style.display = 'none';
+            }
+            if (event.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
+        
+        // Print functionality
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Filter change events
+        yearFilter.addEventListener('change', filterData);
+        monthFilter.addEventListener('change', filterData);
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render initial data
+            filterData();
+        });
+    </script>
+</body>
+</html>

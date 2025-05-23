@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Penimbangan Balita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ffffff;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: var(--dark);
+            transition: all 0.3s;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            border-right: 1px solid #e9ecef;
+            z-index: 100;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-collapsed .sidebar-header h1,
+        .sidebar-collapsed .sidebar-menu li a span {
+            display: none;
+        }
+        
+        .sidebar-collapsed .sidebar-menu li a {
+            justify-content: center;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .sidebar-header img {
+            width: 80px;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: var(--dark);
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu li {
+            list-style: none;
+            padding: 12px 20px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            margin: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .sidebar-menu li:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-menu li.active {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .sidebar-menu a {
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        /* Rainbow Text Animation */
+        @keyframes rainbowText {
+            0% { color: #ff0000; }
+            14% { color: #ff7f00; }
+            28% { color: #ffff00; }
+            42% { color: #00ff00; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #9400d3; }
+            100% { color: #ff0000; }
+        }
+        
+        .sidebar-menu li:hover a span {
+            animation: rainbowText 2s infinite;
+        }
+        
+        /* Icon Colors */
+        .sidebar-menu li:nth-child(1) i { color: var(--secondary); }
+        .sidebar-menu li:nth-child(2) i { color: #20c997; }
+        .sidebar-menu li:nth-child(3) i { color: #fd7e14; }
+        .sidebar-menu li:nth-child(4) i { color: #6f42c1; }
+        .sidebar-menu li:nth-child(5) i { color: var(--danger); }
+        .sidebar-menu li:nth-child(6) i { color: var(--info); }
+        .sidebar-menu li:nth-child(7) i { color: var(--warning); }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+        
+        .main-content-expanded {
+            margin-left: 80px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .nav-link {
+            cursor: pointer;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+        
+        .running-text {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px 0;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .running-text-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: runningText 15s linear infinite;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        @keyframes runningText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        /* Attendance Cards */
+        .attendance-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .attendance-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .attendance-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .attendance-card .number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .attendance-card .hadir {
+            color: var(--success);
+        }
+        
+        .attendance-card .tidak-hadir {
+            color: var(--danger);
+        }
+        
+        /* Month Navigation */
+        .month-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .month-nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .month-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        
+        .month-btn:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .month-btn.active {
+            background-color: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        /* Data Tables */
+        .data-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .table-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 5px;
+        }
+        
+        .view-btn {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Add Data Button */
+        .add-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .add-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-normal {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-kurang {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-stunting {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-hadir {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-tidak-hadir {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 700px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+        
+        .modal-body {
+            padding: 10px 0;
+            max-height: calc(80vh - 150px);
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+        
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-btn:hover {
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .save-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Notification Modal */
+        .notification-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        
+        .notification-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: notificationFadeIn 0.3s;
+        }
+        
+        @keyframes notificationFadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: #28a745;
+            position: relative;
+            margin-bottom: 20px;
+            animation: checkmarkScale 0.5s;
+        }
+        
+        @keyframes checkmarkScale {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .checkmark:after {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 14px;
+            width: 25px;
+            height: 45px;
+            border: solid white;
+            border-width: 0 5px 5px 0;
+            transform: rotate(45deg);
+        }
+        
+        .notification-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .confirm-modal .notification-content {
+            max-width: 400px;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .confirm-btn {
+            padding: 8px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .confirm-yes {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .confirm-no {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Loading Animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.8);
+        }
+        
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .page-btn:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .page-btn.active {
+            background-color: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .page-info {
+            margin: 0 10px;
+            font-size: 14px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header h1,
+            .sidebar-menu li a span {
+                display: none;
+            }
+            
+            .sidebar-menu li a {
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            
+            .attendance-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="logo.png" alt="Logo Posyandu">
+                <h1>Posyandu NIFMASBULUR 1</h1>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li data-target="dashboard">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Beranda</span>
+                    </a>
+                </li>
+                <li data-target="data-anak">
+                    <a href="anakbalita.html">
+                        <i class="fas fa-child"></i>
+                        <span>Data Anak Balita</span>
+                    </a>
+                </li>
+                <li class="active" data-target="penimbangan">
+                    <a href="penimbangan.html">
+                        <i class="fas fa-weight"></i>
+                        <span>Penimbangan</span>
+                    </a>
+                </li>
+                <li data-target="imunisasi">
+                    <a href="#">
+                        <i class="fas fa-syringe"></i>
+                        <span>Imunisasi</span>
+                    </a>
+                </li>
+                <li data-target="vitamin">
+                    <a href="#">
+                        <i class="fas fa-pills"></i>
+                        <span>Vitamin</span>
+                    </a>
+                </li>
+                <li data-target="laporan">
+                    <a href="laporan.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Laporan</span>
+                    </a>
+                </li>
+                <li data-target="pengaturan">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="login.html" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="header">
+                <div class="header-top">
+                    <div>
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                        <h2 style="display: inline-block; margin-left: 10px;">Data Penimbangan Balita</h2>
+                    </div>
+                    <div class="user-info">
+                        <img src="user.png" alt="User">
+                        <span>Admin Posyandu</span>
+                        <button class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Keluar
+                        </button>
+                    </div>
+                </div>
+                <div class="running-text">
+                    <div class="running-text-content">
+                        Selamat datang di Sistem Penimbangan Balita - Aplikasi untuk memudahkan pencatatan data penimbangan bulanan balita
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Attendance Summary -->
+            <div class="attendance-cards" id="attendanceSummary">
+                <div class="attendance-card">
+                    <h3>Total Balita</h3>
+                    <div class="number" id="totalBalita">0</div>
+                </div>
+                <div class="attendance-card">
+                    <h3>Hadir</h3>
+                    <div class="number hadir" id="hadirBalita">0</div>
+                </div>
+                <div class="attendance-card">
+                    <h3>Tidak Hadir</h3>
+                    <div class="number tidak-hadir" id="tidakHadirBalita">0</div>
+                </div>
+            </div>
+            
+            <!-- Month Navigation -->
+            <div class="month-nav">
+                <button class="month-btn active" data-month="januari">Januari</button>
+                <button class="month-btn" data-month="februari">Februari</button>
+                <button class="month-btn" data-month="maret">Maret</button>
+                <button class="month-btn" data-month="april">April</button>
+                <button class="month-btn" data-month="mei">Mei</button>
+                <button class="month-btn" data-month="juni">Juni</button>
+                <button class="month-btn" data-month="juli">Juli</button>
+                <button class="month-btn" data-month="agustus">Agustus</button>
+                <button class="month-btn" data-month="september">September</button>
+                <button class="month-btn" data-month="oktober">Oktober</button>
+                <button class="month-btn" data-month="november">November</button>
+                <button class="month-btn" data-month="desember">Desember</button>
+            </div>
+            
+            <!-- Data Content -->
+            <div class="data-container">
+                <button id="addDataBtn" class="add-btn">
+                    <i class="fas fa-plus"></i> Tambah Data Penimbangan
+                </button>
+                
+                <div class="table-container">
+                    <table id="penimbanganTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Anak</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Usia</th>
+                                <th>Anak Ke-</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Nama Orang Tua</th>
+                                <th>Tanggal Penimbangan</th>
+                                <th>Berat Badan (kg)</th>
+                                <th>Tinggi Badan (cm)</th>
+                                <th>Status Gizi</th>
+                                <th>Status Kehadiran</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="januariData">
+                            <!-- Data for January will be loaded here -->
+                        </tbody>
+                        <tbody id="februariData" style="display:none;">
+                            <!-- Data for February will be loaded here -->
+                        </tbody>
+                        <tbody id="maretData" style="display:none;">
+                            <!-- Data for March will be loaded here -->
+                        </tbody>
+                        <tbody id="aprilData" style="display:none;">
+                            <!-- Data for April will be loaded here -->
+                        </tbody>
+                        <tbody id="meiData" style="display:none;">
+                            <!-- Data for May will be loaded here -->
+                        </tbody>
+                        <tbody id="juniData" style="display:none;">
+                            <!-- Data for June will be loaded here -->
+                        </tbody>
+                        <tbody id="juliData" style="display:none;">
+                            <!-- Data for July will be loaded here -->
+                        </tbody>
+                        <tbody id="agustusData" style="display:none;">
+                            <!-- Data for August will be loaded here -->
+                        </tbody>
+                        <tbody id="septemberData" style="display:none;">
+                            <!-- Data for September will be loaded here -->
+                        </tbody>
+                        <tbody id="oktoberData" style="display:none;">
+                            <!-- Data for October will be loaded here -->
+                        </tbody>
+                        <tbody id="novemberData" style="display:none;">
+                            <!-- Data for November will be loaded here -->
+                        </tbody>
+                        <tbody id="desemberData" style="display:none;">
+                            <!-- Data for December will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button class="page-btn">Previous</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span class="page-info">Halaman 1 dari 3</span>
+                    <button class="page-btn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Data Modal -->
+    <div id="addDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Data Penimbangan</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addDataForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="namaAnak">Nama Anak</label>
+                            <select id="namaAnak" required>
+                                <option value="">Pilih Nama Anak</option>
+                                <!-- Options will be populated from anakbalita.html data -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tglLahir">Tanggal Lahir</label>
+                            <input type="text" id="tglLahir" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="jenisKelamin">Jenis Kelamin</label>
+                            <input type="text" id="jenisKelamin" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="namaOrtu">Nama Orang Tua</label>
+                            <input type="text" id="namaOrtu" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="anakKe">Anak Ke-</label>
+                            <input type="text" id="anakKe" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="usia">Usia</label>
+                            <input type="text" id="usia" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tglPenimbangan">Tanggal Penimbangan</label>
+                            <input type="date" id="tglPenimbangan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="statusKehadiran">Status Kehadiran</label>
+                            <select id="statusKehadiran" required>
+                                <option value="">Pilih Status</option>
+                                <option value="hadir">Hadir</option>
+                                <option value="tidak-hadir">Tidak Hadir</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="beratBadan">Berat Badan (kg)</label>
+                            <input type="number" id="beratBadan" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="tinggiBadan">Tinggi Badan (cm)</label>
+                            <input type="number" id="tinggiBadan" step="0.1" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="statusGizi">Status Gizi</label>
+                            <select id="statusGizi">
+                                <option value="">Pilih Status Gizi</option>
+                                <option value="normal">Normal</option>
+                                <option value="kurang">Gizi Kurang</option>
+                                <option value="stunting">Stunting</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bulanPenimbangan">Bulan Penimbangan</label>
+                            <select id="bulanPenimbangan" required>
+                                <option value="">Pilih Bulan</option>
+                                <option value="januari">Januari</option>
+                                <option value="februari">Februari</option>
+                                <option value="maret">Maret</option>
+                                <option value="april">April</option>
+                                <option value="mei">Mei</option>
+                                <option value="juni">Juni</option>
+                                <option value="juli">Juli</option>
+                                <option value="agustus">Agustus</option>
+                                <option value="september">September</option>
+                                <option value="oktober">Oktober</option>
+                                <option value="november">November</option>
+                                <option value="desember">Desember</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea id="keterangan" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
+                <button type="submit" class="action-btn save-btn" form="addDataForm">Simpan</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Data Modal -->
+    <div id="editDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Data Penimbangan</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editDataForm">
+                    <input type="hidden" id="editId">
+                    <input type="hidden" id="editBulan">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editNamaAnak">Nama Anak</label>
+                            <input type="text" id="editNamaAnak" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editTglLahir">Tanggal Lahir</label>
+                            <input type="text" id="editTglLahir" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editJenisKelamin">Jenis Kelamin</label>
+                            <input type="text" id="editJenisKelamin" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editNamaOrtu">Nama Orang Tua</label>
+                            <input type="text" id="editNamaOrtu" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editAnakKe">Anak Ke-</label>
+                            <input type="text" id="editAnakKe" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editUsia">Usia</label>
+                            <input type="text" id="editUsia" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editTglPenimbangan">Tanggal Penimbangan</label>
+                            <input type="date" id="editTglPenimbangan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editStatusKehadiran">Status Kehadiran</label>
+                            <select id="editStatusKehadiran" required>
+                                <option value="hadir">Hadir</option>
+                                <option value="tidak-hadir">Tidak Hadir</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editBeratBadan">Berat Badan (kg)</label>
+                            <input type="number" id="editBeratBadan" step="0.1" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="editTinggiBadan">Tinggi Badan (cm)</label>
+                            <input type="number" id="editTinggiBadan" step="0.1" min="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editStatusGizi">Status Gizi</label>
+                        <select id="editStatusGizi">
+                            <option value="">Pilih Status Gizi</option>
+                            <option value="normal">Normal</option>
+                            <option value="kurang">Gizi Kurang</option>
+                            <option value="stunting">Stunting</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editKeterangan">Keterangan</label>
+                        <textarea id="editKeterangan" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
+                <button type="submit" class="action-btn save-btn" form="editDataForm">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="notification-modal">
+        <div class="notification-content">
+            <div class="checkmark"></div>
+            <div class="notification-text" id="notificationText">Data berhasil ditambahkan</div>
+            <button class="action-btn cancel-btn close-notification-btn">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirmModal" class="notification-modal confirm-modal">
+        <div class="notification-content">
+            <div style="font-size: 24px; margin-bottom: 20px; color: var(--danger);">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="notification-text">Apakah Anda yakin ingin menghapus data ini?</div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-yes" id="confirmYes">Ya</button>
+                <button class="confirm-btn confirm-no" id="confirmNo">Tidak</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // Sample data from anakbalita.html
+        const anakBalitaData = [
+            {
+                nik: "1234567890123456",
+                namaAnak: "Budi Santoso",
+                tglLahir: "15/01/2020",
+                usia: "4 tahun 5 bulan",
+                anakKe: "1",
+                jenisKelamin: "Laki-laki",
+                namaOrtu: "Andi Wijaya"
+            },
+            {
+                nik: "2345678901234567",
+                namaAnak: "Ani Putri",
+                tglLahir: "22/05/2019",
+                usia: "5 tahun 1 bulan",
+                anakKe: "2",
+                jenisKelamin: "Perempuan",
+                namaOrtu: "Budi Hartono"
+            },
+            {
+                nik: "3456789012345678",
+                namaAnak: "Cici Permata",
+                tglLahir: "10/11/2021",
+                usia: "2 tahun 7 bulan",
+                anakKe: "1",
+                jenisKelamin: "Perempuan",
+                namaOrtu: "Dedi Kurniawan"
+            },
+            {
+                nik: "4567890123456789",
+                namaAnak: "Dodi Pratama",
+                tglLahir: "03/03/2020",
+                usia: "4 tahun 3 bulan",
+                anakKe: "3",
+                jenisKelamin: "Laki-laki",
+                namaOrtu: "Eka Putra"
+            },
+            {
+                nik: "5678901234567890",
+                namaAnak: "Eva Susanti",
+                tglLahir: "18/07/2019",
+                usia: "5 tahun 0 bulan",
+                anakKe: "2",
+                jenisKelamin: "Perempuan",
+                namaOrtu: "Fajar Nugraha"
+            }
+        ];
+
+        // Initialize penimbangan data for each month
+        let penimbanganData = {
+            januari: [],
+            februari: [],
+            maret: [],
+            april: [],
+            mei: [],
+            juni: [],
+            juli: [],
+            agustus: [],
+            september: [],
+            oktober: [],
+            november: [],
+            desember: []
+        };
+
+        // Toggle sidebar
+        document.querySelector('.nav-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('main-content-expanded');
+        });
+        
+        // Logout button functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if(confirm('Apakah Anda yakin ingin keluar?')) {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Rainbow text animation for menu items
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const textSpan = this.querySelector('a span');
+                if (textSpan) {
+                    textSpan.style.animation = 'rainbowText 2s infinite';
+                }
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                const textSpan = this.querySelector('a span');
+                if (textSpan) {
+                    textSpan.style.animation = 'none';
+                }
+            });
+        });
+        
+        // Function to calculate age from birth date
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birthDateObj = new Date(birthDate.split('/').reverse().join('-'));
+            
+            let years = today.getFullYear() - birthDateObj.getFullYear();
+            let months = today.getMonth() - birthDateObj.getMonth();
+            
+            if (months < 0 || (months === 0 && today.getDate() < birthDateObj.getDate())) {
+                years--;
+                months += 12;
+            }
+            
+            if (today.getDate() < birthDateObj.getDate()) {
+                months--;
+            }
+            
+            return `${years} tahun ${months} bulan`;
+        }
+        
+        // Populate anak select options
+        function populateAnakOptions() {
+            const select = document.getElementById('namaAnak');
+            select.innerHTML = '<option value="">Pilih Nama Anak</option>';
+            
+            anakBalitaData.forEach(anak => {
+                const option = document.createElement('option');
+                option.value = anak.nik;
+                option.textContent = anak.namaAnak;
+                option.dataset.tglLahir = anak.tglLahir;
+                option.dataset.jenisKelamin = anak.jenisKelamin;
+                option.dataset.namaOrtu = anak.namaOrtu;
+                option.dataset.anakKe = anak.anakKe;
+                option.dataset.usia = anak.usia;
+                select.appendChild(option);
+            });
+        }
+        
+        // When anak is selected, fill other fields
+        document.getElementById('namaAnak').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                document.getElementById('tglLahir').value = selectedOption.dataset.tglLahir;
+                document.getElementById('jenisKelamin').value = selectedOption.dataset.jenisKelamin;
+                document.getElementById('namaOrtu').value = selectedOption.dataset.namaOrtu;
+                document.getElementById('anakKe').value = selectedOption.dataset.anakKe;
+                document.getElementById('usia').value = selectedOption.dataset.usia;
+            } else {
+                document.getElementById('tglLahir').value = '';
+                document.getElementById('jenisKelamin').value = '';
+                document.getElementById('namaOrtu').value = '';
+                document.getElementById('anakKe').value = '';
+                document.getElementById('usia').value = '';
+            }
+        });
+        
+        // Month navigation functionality
+        document.querySelectorAll('.month-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.month-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Hide all month data
+                document.querySelectorAll('#penimbanganTable tbody').forEach(tbody => {
+                    tbody.style.display = 'none';
+                });
+                
+                // Show selected month data
+                const month = this.dataset.month;
+                document.getElementById(`${month}Data`).style.display = 'table-row-group';
+                
+                // Update attendance summary
+                updateAttendanceSummary(month);
+            });
+        });
+        
+        // Update attendance summary
+        function updateAttendanceSummary(month) {
+            const data = penimbanganData[month];
+            const total = data.length;
+            const hadir = data.filter(item => item.statusKehadiran === 'hadir').length;
+            const tidakHadir = total - hadir;
+            
+            document.getElementById('totalBalita').textContent = total;
+            document.getElementById('hadirBalita').textContent = hadir;
+            document.getElementById('tidakHadirBalita').textContent = tidakHadir;
+        }
+        
+        // Modal functionality
+        const addDataBtn = document.getElementById('addDataBtn');
+        const addDataModal = document.getElementById('addDataModal');
+        const editDataModal = document.getElementById('editDataModal');
+        const notificationModal = document.getElementById('notificationModal');
+        const confirmModal = document.getElementById('confirmModal');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const closeBtns = document.querySelectorAll('.close-btn, .close-modal-btn, .close-notification-btn');
+        const confirmYesBtn = document.getElementById('confirmYes');
+        const confirmNoBtn = document.getElementById('confirmNo');
+        
+        // Show add data modal
+        addDataBtn.addEventListener('click', function() {
+            populateAnakOptions();
+            addDataModal.style.display = 'block';
+        });
+        
+        // Delete button functionality (will be added dynamically)
+        function setupDeleteButton(btn) {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const bulan = row.closest('tbody').id.replace('Data', '');
+                
+                confirmModal.style.display = 'block';
+                
+                // Store the row to delete if confirmed
+                confirmYesBtn.onclick = function() {
+                    confirmModal.style.display = 'none';
+                    loadingOverlay.style.display = 'block';
+                    
+                    // Simulate loading
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        row.remove();
+                        
+                        // Update penimbangan data
+                        const id = row.dataset.id;
+                        penimbanganData[bulan] = penimbanganData[bulan].filter(item => item.id !== id);
+                        
+                        // Update row numbers
+                        updateRowNumbers(bulan);
+                        
+                        // Update attendance summary
+                        updateAttendanceSummary(bulan);
+                        
+                        // Show success notification
+                        document.getElementById('notificationText').textContent = 'Data berhasil dihapus';
+                        notificationModal.style.display = 'block';
+                    }, 1000);
+                };
+            });
+        }
+        
+        // Edit button functionality (will be added dynamically)
+        function setupEditButton(btn) {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const bulan = row.closest('tbody').id.replace('Data', '');
+                
+                document.getElementById('editId').value = row.dataset.id;
+                document.getElementById('editBulan').value = bulan;
+                document.getElementById('editNamaAnak').value = row.cells[1].textContent;
+                document.getElementById('editTglLahir').value = row.cells[2].textContent;
+                document.getElementById('editJenisKelamin').value = row.cells[5].textContent;
+                document.getElementById('editNamaOrtu').value = row.cells[6].textContent;
+                document.getElementById('editAnakKe').value = row.cells[4].textContent;
+                document.getElementById('editUsia').value = row.cells[3].textContent;
+                
+                // Format date from DD/MM/YYYY to YYYY-MM-DD for date input
+                const tglPenimbanganParts = row.cells[7].textContent.split('/');
+                const formattedTglPenimbangan = `${tglPenimbanganParts[2]}-${tglPenimbanganParts[1].padStart(2, '0')}-${tglPenimbanganParts[0].padStart(2, '0')}`;
+                document.getElementById('editTglPenimbangan').value = formattedTglPenimbangan;
+                
+                document.getElementById('editBeratBadan').value = row.cells[8].textContent;
+                document.getElementById('editTinggiBadan').value = row.cells[9].textContent;
+                
+                // Get status gizi
+                const statusGiziBadge = row.cells[10].querySelector('.status-badge');
+                document.getElementById('editStatusGizi').value = statusGiziBadge ? 
+                    statusGiziBadge.classList[1].replace('status-', '') : '';
+                
+                // Get status kehadiran
+                const statusKehadiranBadge = row.cells[11].querySelector('.status-badge');
+                document.getElementById('editStatusKehadiran').value = statusKehadiranBadge ? 
+                    statusKehadiranBadge.classList[1].replace('status-', '') : '';
+                
+                document.getElementById('editKeterangan').value = row.cells[12].textContent;
+                
+                editDataModal.style.display = 'block';
+            });
+        }
+        
+        // Update row numbers for a specific month
+        function updateRowNumbers(bulan) {
+            const rows = document.querySelectorAll(`#${bulan}Data tr`);
+            rows.forEach((row, index) => {
+                row.cells[0].textContent = index + 1;
+            });
+        }
+        
+        // Close modals
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                addDataModal.style.display = 'none';
+                editDataModal.style.display = 'none';
+                notificationModal.style.display = 'none';
+                confirmModal.style.display = 'none';
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === addDataModal) {
+                addDataModal.style.display = 'none';
+            }
+            if (event.target === editDataModal) {
+                editDataModal.style.display = 'none';
+            }
+            if (event.target === notificationModal) {
+                notificationModal.style.display = 'none';
+            }
+            if (event.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
+        
+        // Form submission for add data
+        document.getElementById('addDataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            loadingOverlay.style.display = 'block';
+            
+            // Simulate loading and then show success notification
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                
+                // Get form values
+                const nik = document.getElementById('namaAnak').value;
+                const selectedAnak = anakBalitaData.find(anak => anak.nik === nik);
+                const beratBadan = document.getElementById('beratBadan').value;
+                const tinggiBadan = document.getElementById('tinggiBadan').value;
+                const statusGizi = document.getElementById('statusGizi').value;
+                const bulanPenimbangan = document.getElementById('bulanPenimbangan').value;
+                const statusKehadiran = document.getElementById('statusKehadiran').value;
+                const keterangan = document.getElementById('keterangan').value;
+                
+                // Format date from YYYY-MM-DD to DD/MM/YYYY
+                const tglPenimbangan = document.getElementById('tglPenimbangan').value;
+                const tglPenimbanganParts = tglPenimbangan.split('-');
+                const formattedTglPenimbangan = `${tglPenimbanganParts[2]}/${tglPenimbanganParts[1]}/${tglPenimbanganParts[0]}`;
+                
+                // Create new data object
+                const newData = {
+                    id: Date.now().toString(),
+                    nik: nik,
+                    namaAnak: selectedAnak.namaAnak,
+                    tglLahir: selectedAnak.tglLahir,
+                    usia: selectedAnak.usia,
+                    anakKe: selectedAnak.anakKe,
+                    jenisKelamin: selectedAnak.jenisKelamin,
+                    namaOrtu: selectedAnak.namaOrtu,
+                    tglPenimbangan: formattedTglPenimbangan,
+                    beratBadan: beratBadan,
+                    tinggiBadan: tinggiBadan,
+                    statusGizi: statusGizi,
+                    statusKehadiran: statusKehadiran,
+                    keterangan: keterangan
+                };
+                
+                // Add to penimbangan data
+                penimbanganData[bulanPenimbangan].push(newData);
+                
+                // Create new row
+                const tbody = document.getElementById(`${bulanPenimbangan}Data`);
+                const newRow = document.createElement('tr');
+                newRow.dataset.id = newData.id;
+                
+                const rowNumber = tbody.querySelectorAll('tr').length + 1;
+                
+                // Get status badge class
+                let statusGiziClass = '';
+                let statusGiziText = '';
+                switch(statusGizi) {
+                    case 'normal':
+                        statusGiziClass = 'status-normal';
+                        statusGiziText = 'Normal';
+                        break;
+                    case 'kurang':
+                        statusGiziClass = 'status-kurang';
+                        statusGiziText = 'Gizi Kurang';
+                        break;
+                    case 'stunting':
+                        statusGiziClass = 'status-stunting';
+                        statusGiziText = 'Stunting';
+                        break;
+                }
+                
+                // Get status kehadiran badge class
+                let statusKehadiranClass = '';
+                let statusKehadiranText = '';
+                switch(statusKehadiran) {
+                    case 'hadir':
+                        statusKehadiranClass = 'status-hadir';
+                        statusKehadiranText = 'Hadir';
+                        break;
+                    case 'tidak-hadir':
+                        statusKehadiranClass = 'status-tidak-hadir';
+                        statusKehadiranText = 'Tidak Hadir';
+                        break;
+                }
+                
+                newRow.innerHTML = `
+                    <td>${rowNumber}</td>
+                    <td>${newData.namaAnak}</td>
+                    <td>${newData.tglLahir}</td>
+                    <td>${newData.usia}</td>
+                    <td>${newData.anakKe}</td>
+                    <td>${newData.jenisKelamin}</td>
+                    <td>${newData.namaOrtu}</td>
+                    <td>${newData.tglPenimbangan}</td>
+                    <td>${newData.beratBadan || '-'}</td>
+                    <td>${newData.tinggiBadan || '-'}</td>
+                    <td><span class="status-badge ${statusGiziClass}">${statusGiziText || '-'}</span></td>
+                    <td><span class="status-badge ${statusKehadiranClass}">${statusKehadiranText}</span></td>
+                    <td>${newData.keterangan || '-'}</td>
+                    <td>
+                        <button class="action-btn edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(newRow);
+                
+                // Add event listeners to new buttons
+                setupEditButton(newRow.querySelector('.edit-btn'));
+                setupDeleteButton(newRow.querySelector('.delete-btn'));
+                
+                // Reset form and close modal
+                this.reset();
+                addDataModal.style.display = 'none';
+                
+                // Update attendance summary
+                updateAttendanceSummary(bulanPenimbangan);
+                
+                // Show success notification
+                document.getElementById('notificationText').textContent = 'Data berhasil ditambahkan';
+                notificationModal.style.display = 'block';
+            }, 1000);
+        });
+        
+        // Form submission for edit data
+        document.getElementById('editDataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            loadingOverlay.style.display = 'block';
+            
+            // Simulate loading and then show success notification
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                
+                // Get form values
+                const id = document.getElementById('editId').value;
+                const bulan = document.getElementById('editBulan').value;
+                const beratBadan = document.getElementById('editBeratBadan').value;
+                const tinggiBadan = document.getElementById('editTinggiBadan').value;
+                const statusGizi = document.getElementById('editStatusGizi').value;
+                const statusKehadiran = document.getElementById('editStatusKehadiran').value;
+                const keterangan = document.getElementById('editKeterangan').value;
+                
+                // Format date from YYYY-MM-DD to DD/MM/YYYY
+                const tglPenimbangan = document.getElementById('editTglPenimbangan').value;
+                const tglPenimbanganParts = tglPenimbangan.split('-');
+                const formattedTglPenimbangan = `${tglPenimbanganParts[2]}/${tglPenimbanganParts[1]}/${tglPenimbanganParts[0]}`;
+                
+                // Find the data in penimbanganData
+                const dataIndex = penimbanganData[bulan].findIndex(item => item.id === id);
+                if (dataIndex !== -1) {
+                    // Update the data
+                    penimbanganData[bulan][dataIndex].tglPenimbangan = formattedTglPenimbangan;
+                    penimbanganData[bulan][dataIndex].beratBadan = beratBadan;
+                    penimbanganData[bulan][dataIndex].tinggiBadan = tinggiBadan;
+                    penimbanganData[bulan][dataIndex].statusGizi = statusGizi;
+                    penimbanganData[bulan][dataIndex].statusKehadiran = statusKehadiran;
+                    penimbanganData[bulan][dataIndex].keterangan = keterangan;
+                    
+                    // Find the row to update
+                    const row = document.querySelector(`#${bulan}Data tr[data-id="${id}"]`);
+                    if (row) {
+                        // Update the row data
+                        row.cells[7].textContent = formattedTglPenimbangan;
+                        row.cells[8].textContent = beratBadan || '-';
+                        row.cells[9].textContent = tinggiBadan || '-';
+                        row.cells[12].textContent = keterangan || '-';
+                        
+                        // Update status gizi badge
+                        let statusGiziClass = '';
+                        let statusGiziText = '';
+                        switch(statusGizi) {
+                            case 'normal':
+                                statusGiziClass = 'status-normal';
+                                statusGiziText = 'Normal';
+                                break;
+                            case 'kurang':
+                                statusGiziClass = 'status-kurang';
+                                statusGiziText = 'Gizi Kurang';
+                                break;
+                            case 'stunting':
+                                statusGiziClass = 'status-stunting';
+                                statusGiziText = 'Stunting';
+                                break;
+                        }
+                        
+                        row.cells[10].innerHTML = `<span class="status-badge ${statusGiziClass}">${statusGiziText || '-'}</span>`;
+                        
+                        // Update status kehadiran badge
+                        let statusKehadiranClass = '';
+                        let statusKehadiranText = '';
+                        switch(statusKehadiran) {
+                            case 'hadir':
+                                statusKehadiranClass = 'status-hadir';
+                                statusKehadiranText = 'Hadir';
+                                break;
+                            case 'tidak-hadir':
+                                statusKehadiranClass = 'status-tidak-hadir';
+                                statusKehadiranText = 'Tidak Hadir';
+                                break;
+                        }
+                        
+                        row.cells[11].innerHTML = `<span class="status-badge ${statusKehadiranClass}">${statusKehadiranText}</span>`;
+                    }
+                }
+                
+                // Close modal
+                editDataModal.style.display = 'none';
+                
+                // Update attendance summary
+                updateAttendanceSummary(bulan);
+                
+                // Show success notification
+                document.getElementById('notificationText').textContent = 'Data berhasil diperbarui';
+                notificationModal.style.display = 'block';
+            }, 1000);
+        });
+        
+        // Confirm No button
+        confirmNoBtn.addEventListener('click', function() {
+            confirmModal.style.display = 'none';
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate sample data for demonstration
+            penimbanganData.januari = [
+                {
+                    id: '1',
+                    nik: '1234567890123456',
+                    namaAnak: 'Budi Santoso',
+                    tglLahir: '15/01/2020',
+                    usia: '4 tahun 5 bulan',
+                    anakKe: '1',
+                    jenisKelamin: 'Laki-laki',
+                    namaOrtu: 'Andi Wijaya',
+                    tglPenimbangan: '10/01/2024',
+                    beratBadan: '15.5',
+                    tinggiBadan: '95.2',
+                    statusGizi: 'normal',
+                    statusKehadiran: 'hadir',
+                    keterangan: 'Kondisi baik'
+                },
+                {
+                    id: '2',
+                    nik: '2345678901234567',
+                    namaAnak: 'Ani Putri',
+                    tglLahir: '22/05/2019',
+                    usia: '5 tahun 1 bulan',
+                    anakKe: '2',
+                    jenisKelamin: 'Perempuan',
+                    namaOrtu: 'Budi Hartono',
+                    tglPenimbangan: '10/01/2024',
+                    beratBadan: '14.8',
+                    tinggiBadan: '92.5',
+                    statusGizi: 'normal',
+                    statusKehadiran: 'hadir',
+                    keterangan: 'Perlu perbaikan gizi'
+                },
+                {
+                    id: '3',
+                    nik: '3456789012345678',
+                    namaAnak: 'Cici Permata',
+                    tglLahir: '10/11/2021',
+                    usia: '2 tahun 7 bulan',
+                    anakKe: '1',
+                    jenisKelamin: 'Perempuan',
+                    namaOrtu: 'Dedi Kurniawan',
+                    tglPenimbangan: '10/01/2024',
+                    beratBadan: '',
+                    tinggiBadan: '',
+                    statusGizi: '',
+                    statusKehadiran: 'tidak-hadir',
+                    keterangan: 'Tidak hadir karena sakit'
+                }
+            ];
+            
+            // Render sample data
+            renderPenimbanganData('januari');
+            updateAttendanceSummary('januari');
+        });
+        
+        // Render penimbangan data for a specific month
+        function renderPenimbanganData(bulan) {
+            const tbody = document.getElementById(`${bulan}Data`);
+            tbody.innerHTML = '';
+            
+            penimbanganData[bulan].forEach((data, index) => {
+                // Get status gizi badge class
+                let statusGiziClass = '';
+                let statusGiziText = '';
+                switch(data.statusGizi) {
+                    case 'normal':
+                        statusGiziClass = 'status-normal';
+                        statusGiziText = 'Normal';
+                        break;
+                    case 'kurang':
+                        statusGiziClass = 'status-kurang';
+                        statusGiziText = 'Gizi Kurang';
+                        break;
+                    case 'stunting':
+                        statusGiziClass = 'status-stunting';
+                        statusGiziText = 'Stunting';
+                        break;
+                }
+                
+                // Get status kehadiran badge class
+                let statusKehadiranClass = '';
+                let statusKehadiranText = '';
+                switch(data.statusKehadiran) {
+                    case 'hadir':
+                        statusKehadiranClass = 'status-hadir';
+                        statusKehadiranText = 'Hadir';
+                        break;
+                    case 'tidak-hadir':
+                        statusKehadiranClass = 'status-tidak-hadir';
+                        statusKehadiranText = 'Tidak Hadir';
+                        break;
+                }
+                
+                const row = document.createElement('tr');
+                row.dataset.id = data.id;
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${data.namaAnak}</td>
+                    <td>${data.tglLahir}</td>
+                    <td>${data.usia}</td>
+                    <td>${data.anakKe}</td>
+                    <td>${data.jenisKelamin}</td>
+                    <td>${data.namaOrtu}</td>
+                    <td>${data.tglPenimbangan}</td>
+                    <td>${data.beratBadan || '-'}</td>
+                    <td>${data.tinggiBadan || '-'}</td>
+                    <td><span class="status-badge ${statusGiziClass}">${statusGiziText || '-'}</span></td>
+                    <td><span class="status-badge ${statusKehadiranClass}">${statusKehadiranText}</span></td>
+                    <td>${data.keterangan || '-'}</td>
+                    <td>
+                        <button class="action-btn edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+                
+                // Add event listeners to buttons
+                setupEditButton(row.querySelector('.edit-btn'));
+                setupDeleteButton(row.querySelector('.delete-btn'));
+            });
+        }
+    </script>
+</body>
+</html>

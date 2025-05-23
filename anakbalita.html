@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Anak Balita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #ffffff;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --info: #17a2b8;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: var(--dark);
+            transition: all 0.3s;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            border-right: 1px solid #e9ecef;
+            z-index: 100;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-collapsed .sidebar-header h1,
+        .sidebar-collapsed .sidebar-menu li a span {
+            display: none;
+        }
+        
+        .sidebar-collapsed .sidebar-menu li a {
+            justify-content: center;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .sidebar-header img {
+            width: 80px;
+            height: auto;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-header h1 {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: var(--dark);
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu li {
+            list-style: none;
+            padding: 12px 20px;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            margin: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .sidebar-menu li:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        .sidebar-menu li.active {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .sidebar-menu a {
+            color: var(--dark);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .sidebar-menu i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        /* Rainbow Text Animation */
+        @keyframes rainbowText {
+            0% { color: #ff0000; }
+            14% { color: #ff7f00; }
+            28% { color: #ffff00; }
+            42% { color: #00ff00; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #9400d3; }
+            100% { color: #ff0000; }
+        }
+        
+        .sidebar-menu li:hover a span {
+            animation: rainbowText 2s infinite;
+        }
+        
+        /* Icon Colors */
+        .sidebar-menu li:nth-child(1) i { color: var(--secondary); }
+        .sidebar-menu li:nth-child(2) i { color: #20c997; }
+        .sidebar-menu li:nth-child(3) i { color: #fd7e14; }
+        .sidebar-menu li:nth-child(4) i { color: #6f42c1; }
+        .sidebar-menu li:nth-child(5) i { color: var(--danger); }
+        .sidebar-menu li:nth-child(6) i { color: var(--info); }
+        .sidebar-menu li:nth-child(7) i { color: var(--warning); }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s;
+        }
+        
+        .main-content-expanded {
+            margin-left: 80px;
+        }
+        
+        /* Fixed header when scrolling */
+        .header-container {
+            position: sticky;
+            top: 0;
+            background: #f5f7fa;
+            z-index: 99;
+            padding-bottom: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .nav-link {
+            cursor: pointer;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+        
+        .running-text {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px 0;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .running-text-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: runningText 15s linear infinite;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        @keyframes runningText {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+        
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        /* Data Tables */
+        .data-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            color: var(--dark);
+            font-weight: 600;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .table-container::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari and Opera */
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Highlight duplicate names */
+        .duplicate-name {
+            background-color: rgba(255, 213, 79, 0.3); /* Light orange */
+        }
+        
+        /* Highlight duplicate parents */
+        .duplicate-parent {
+            background-color: rgba(100, 181, 246, 0.3); /* Light blue */
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-right: 5px;
+        }
+        
+        .view-btn {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .edit-btn {
+            background-color: var(--warning);
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .action-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* Action buttons container */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .export-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .print-btn {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .print-btn:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+        }
+        
+        /* Add Data Button */
+        .add-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .add-btn:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .page-btn:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .page-btn.active {
+            background-color: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .page-info {
+            margin: 0 15px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: modalFadeIn 0.3s;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+        
+        .modal-body {
+            padding: 10px 0;
+            max-height: calc(80vh - 150px);
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            position: sticky;
+            bottom: 0;
+            background: white;
+        }
+        
+        .close-btn {
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-btn:hover {
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .save-btn {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Notification Modal */
+        .notification-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        
+        .notification-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: notificationFadeIn 0.3s;
+        }
+        
+        @keyframes notificationFadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: #28a745;
+            position: relative;
+            margin-bottom: 20px;
+            animation: checkmarkScale 0.5s;
+        }
+        
+        @keyframes checkmarkScale {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .checkmark:after {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 14px;
+            width: 25px;
+            height: 45px;
+            border: solid white;
+            border-width: 0 5px 5px 0;
+            transform: rotate(45deg);
+        }
+        
+        .notification-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .confirm-modal .notification-content {
+            max-width: 400px;
+        }
+        
+        .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .confirm-btn {
+            padding: 8px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .confirm-yes {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .confirm-no {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        /* Loading Animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.8);
+        }
+        
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Photo Preview */
+        .photo-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+        
+        /* Print styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .data-container, .data-container * {
+                visibility: visible;
+            }
+            .data-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            .action-buttons, .add-btn, .pagination {
+                display: none !important;
+            }
+            table {
+                width: 100% !important;
+            }
+            th, td {
+                padding: 8px !important;
+                font-size: 12px !important;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+            
+            .sidebar-header h1,
+            .sidebar-menu li a span {
+                display: none;
+            }
+            
+            .sidebar-menu li a {
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+            
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="logo.png" alt="Logo Posyandu">
+                <h1>Posyandu NIFMASBULUR 1</h1>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li data-target="dashboard">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Beranda</span>
+                    </a>
+                </li>
+                <li class="active" data-target="data-anak">
+                    <a href="anakbalita.html">
+                        <i class="fas fa-child"></i>
+                        <span>Data Anak Balita</span>
+                    </a>
+                </li>
+                <li data-target="penimbangan">
+                    <a href="penimbangan.html">
+                        <i class="fas fa-weight"></i>
+                        <span>Penimbangan</span>
+                    </a>
+                </li>
+                <li data-target="imunisasi">
+                    <a href="#">
+                        <i class="fas fa-syringe"></i>
+                        <span>Imunisasi</span>
+                    </a>
+                </li>
+                <li data-target="vitamin">
+                    <a href="#">
+                        <i class="fas fa-pills"></i>
+                        <span>Vitamin</span>
+                    </a>
+                </li>
+                <li data-target="laporan">
+                    <a href="laporan.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Laporan</span>
+                    </a>
+                </li>
+                <li data-target="pengaturan">
+                    <a href="#">
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="login.html" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Keluar</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="header-container">
+                <div class="header">
+                    <div class="header-top">
+                        <div>
+                            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                            <h2 style="display: inline-block; margin-left: 10px;">Data Anak Balita</h2>
+                        </div>
+                        <div class="user-info">
+                            <img src="user.png" alt="User">
+                            <span>Admin Posyandu</span>
+                            <button class="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Keluar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="running-text">
+                        <div class="running-text-content">
+                            Selamat datang di Sistem Posyandu Digital - Aplikasi untuk memudahkan pengelolaan data balita dan kegiatan posyandu
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Content -->
+            <div class="data-container">
+                <div class="action-buttons">
+                    <button id="addDataBtn" class="add-btn">
+                        <i class="fas fa-plus"></i> Tambah Data
+                    </button>
+                    <button id="exportBtn" class="export-btn">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </button>
+                    <button id="printBtn" class="print-btn">
+                        <i class="fas fa-print"></i> Cetak Data
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NIK</th>
+                                <th>Nama Anak</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Usia</th>
+                                <th>Anak Ke-</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Nama Orang Tua</th>
+                                <th>Foto</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>1234567890123456</td>
+                                <td>Budi Santoso</td>
+                                <td>15/01/2020</td>
+                                <td>4 tahun 5 bulan</td>
+                                <td>1</td>
+                                <td>Laki-laki</td>
+                                <td>Andi Wijaya</td>
+                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
+                                <td>
+                                    <button class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                    <button class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-btn delete-btn">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2345678901234567</td>
+                                <td>Ani Putri</td>
+                                <td>22/05/2019</td>
+                                <td>5 tahun 1 bulan</td>
+                                <td>2</td>
+                                <td>Perempuan</td>
+                                <td>Budi Hartono</td>
+                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
+                                <td>
+                                    <button class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                    <button class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-btn delete-btn">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>3456789012345678</td>
+                                <td>Cici Permata</td>
+                                <td>10/11/2021</td>
+                                <td>2 tahun 7 bulan</td>
+                                <td>1</td>
+                                <td>Perempuan</td>
+                                <td>Dedi Kurniawan</td>
+                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
+                                <td>
+                                    <button class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                    <button class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-btn delete-btn">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>4567890123456789</td>
+                                <td>Dodi Pratama</td>
+                                <td>03/03/2020</td>
+                                <td>4 tahun 3 bulan</td>
+                                <td>3</td>
+                                <td>Laki-laki</td>
+                                <td>Eka Putra</td>
+                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
+                                <td>
+                                    <button class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                    <button class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-btn delete-btn">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>5678901234567890</td>
+                                <td>Eva Susanti</td>
+                                <td>18/07/2019</td>
+                                <td>5 tahun 0 bulan</td>
+                                <td>2</td>
+                                <td>Perempuan</td>
+                                <td>Fajar Nugraha</td>
+                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
+                                <td>
+                                    <button class="action-btn view-btn">
+                                        <i class="fas fa-eye"></i> Lihat
+                                    </button>
+                                    <button class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                    <button class="action-btn delete-btn">
+                                        <i class="fas fa-trash"></i> Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination">
+                    <button class="page-btn">Previous</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span class="page-info">Halaman 1 dari 3</span>
+                    <button class="page-btn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Data Modal -->
+    <div id="addDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tambah Data Anak Balita</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="addDataForm">
+                    <div class="form-group">
+                        <label for="nik">NIK</label>
+                        <input type="text" id="nik" required maxlength="16" pattern="[0-9]{16}" title="NIK harus 16 digit angka">
+                    </div>
+                    <div class="form-group">
+                        <label for="namaAnak">Nama Anak</label>
+                        <input type="text" id="namaAnak" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tglLahir">Tanggal Lahir</label>
+                        <input type="date" id="tglLahir" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="anakKe">Anak Ke-</label>
+                        <input type="number" id="anakKe" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="jenisKelamin">Jenis Kelamin</label>
+                        <select id="jenisKelamin" required>
+                            <option value="">Pilih Jenis Kelamin</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="namaOrtu">Nama Orang Tua</label>
+                        <input type="text" id="namaOrtu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fotoAnak">Foto Anak</label>
+                        <input type="file" id="fotoAnak" accept="image/*">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
+                        <button type="submit" class="action-btn save-btn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Data Modal -->
+    <div id="editDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Data Anak Balita</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editDataForm">
+                    <input type="hidden" id="editId">
+                    <div class="form-group">
+                        <label for="editNik">NIK</label>
+                        <input type="text" id="editNik" required maxlength="16" pattern="[0-9]{16}" title="NIK harus 16 digit angka">
+                    </div>
+                    <div class="form-group">
+                        <label for="editNamaAnak">Nama Anak</label>
+                        <input type="text" id="editNamaAnak" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTglLahir">Tanggal Lahir</label>
+                        <input type="date" id="editTglLahir" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAnakKe">Anak Ke-</label>
+                        <input type="number" id="editAnakKe" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editJenisKelamin">Jenis Kelamin</label>
+                        <select id="editJenisKelamin" required>
+                            <option value="">Pilih Jenis Kelamin</option>
+                            <option value="Laki-laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNamaOrtu">Nama Orang Tua</label>
+                        <input type="text" id="editNamaOrtu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFotoAnak">Foto Anak</label>
+                        <input type="file" id="editFotoAnak" accept="image/*">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
+                        <button type="submit" class="action-btn save-btn">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Data Modal -->
+    <div id="viewDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Data Anak Balita</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="width: 30%; font-weight: bold;">NIK</td>
+                        <td id="viewNik">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Nama Anak</td>
+                        <td id="viewNamaAnak">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Tanggal Lahir</td>
+                        <td id="viewTglLahir">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Usia</td>
+                        <td id="viewUsia">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Anak Ke-</td>
+                        <td id="viewAnakKe">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Jenis Kelamin</td>
+                        <td id="viewJenisKelamin">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Nama Orang Tua</td>
+                        <td id="viewNamaOrtu">-</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">Foto</td>
+                        <td><img id="viewFotoAnak" src="https://via.placeholder.com/100" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="action-btn cancel-btn close-modal-btn">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationModal" class="notification-modal">
+        <div class="notification-content">
+            <div class="checkmark"></div>
+            <div class="notification-text" id="notificationText">Data berhasil ditambahkan</div>
+            <button class="action-btn cancel-btn close-notification-btn">Tutup</button>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirmModal" class="notification-modal confirm-modal">
+        <div class="notification-content">
+            <div style="font-size: 24px; margin-bottom: 20px; color: var(--danger);">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="notification-text">Apakah Anda yakin ingin menghapus data ini?</div>
+            <div class="confirm-buttons">
+                <button class="confirm-btn confirm-yes" id="confirmYes">Ya</button>
+                <button class="confirm-btn confirm-no" id="confirmNo">Tidak</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // Toggle sidebar
+        document.querySelector('.nav-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('main-content-expanded');
+        });
+        
+        // Logout button functionality
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if(confirm('Apakah Anda yakin ingin keluar?')) {
+                window.location.href = 'login.html';
+            }
+        });
+        
+        // Rainbow text animation for menu items
+        document.querySelectorAll('.sidebar-menu li').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const textSpan = this.querySelector('a span');
+                if (textSpan) {
+                    textSpan.style.animation = 'rainbowText 2s infinite';
+                }
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                const textSpan = this.querySelector('a span');
+                if (textSpan) {
+                    textSpan.style.animation = 'none';
+                }
+            });
+        });
+        
+        // Function to calculate age from birth date
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birthDateObj = new Date(birthDate);
+            
+            let years = today.getFullYear() - birthDateObj.getFullYear();
+            let months = today.getMonth() - birthDateObj.getMonth();
+            
+            if (months < 0 || (months === 0 && today.getDate() < birthDateObj.getDate())) {
+                years--;
+                months += 12;
+            }
+            
+            if (today.getDate() < birthDateObj.getDate()) {
+                months--;
+            }
+            
+            return `${years} tahun ${months} bulan`;
+        }
+        
+        // Function to highlight duplicate names and parents
+        function highlightDuplicates() {
+            const rows = document.querySelectorAll('#dataTable tbody tr');
+            const nameCount = {};
+            const parentCount = {};
+            
+            // Count occurrences of names and parents
+            rows.forEach(row => {
+                const name = row.cells[2].textContent.trim();
+                const parent = row.cells[7].textContent.trim();
+                
+                nameCount[name] = (nameCount[name] || 0) + 1;
+                parentCount[parent] = (parentCount[parent] || 0) + 1;
+            });
+            
+            // Apply highlighting
+            rows.forEach(row => {
+                const name = row.cells[2].textContent.trim();
+                const parent = row.cells[7].textContent.trim();
+                
+                // Reset classes
+                row.cells[2].classList.remove('duplicate-name');
+                row.cells[7].classList.remove('duplicate-parent');
+                
+                // Apply classes if duplicates found
+                if (nameCount[name] > 1) {
+                    row.cells[2].classList.add('duplicate-name');
+                }
+                if (parentCount[parent] > 1) {
+                    row.cells[7].classList.add('duplicate-parent');
+                }
+            });
+        }
+        
+        // Modal functionality
+        const addDataBtn = document.getElementById('addDataBtn');
+        const addDataModal = document.getElementById('addDataModal');
+        const editDataModal = document.getElementById('editDataModal');
+        const viewDataModal = document.getElementById('viewDataModal');
+        const notificationModal = document.getElementById('notificationModal');
+        const confirmModal = document.getElementById('confirmModal');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const closeBtns = document.querySelectorAll('.close-btn, .close-modal-btn, .close-notification-btn');
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const editBtns = document.querySelectorAll('.edit-btn');
+        const deleteBtns = document.querySelectorAll('.delete-btn');
+        const confirmYesBtn = document.getElementById('confirmYes');
+        const confirmNoBtn = document.getElementById('confirmNo');
+        const exportBtn = document.getElementById('exportBtn');
+        const printBtn = document.getElementById('printBtn');
+        
+        // Show add data modal
+        addDataBtn.addEventListener('click', function() {
+            addDataModal.style.display = 'block';
+        });
+        
+        // Show view data modal
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const cells = row.querySelectorAll('td');
+                
+                document.getElementById('viewNik').textContent = cells[1].textContent;
+                document.getElementById('viewNamaAnak').textContent = cells[2].textContent;
+                document.getElementById('viewTglLahir').textContent = cells[3].textContent;
+                document.getElementById('viewUsia').textContent = cells[4].textContent;
+                document.getElementById('viewAnakKe').textContent = cells[5].textContent;
+                document.getElementById('viewJenisKelamin').textContent = cells[6].textContent;
+                document.getElementById('viewNamaOrtu').textContent = cells[7].textContent;
+                document.getElementById('viewFotoAnak').src = cells[8].querySelector('img').src;
+                
+                viewDataModal.style.display = 'block';
+            });
+        });
+        
+        // Show edit data modal
+        editBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const cells = row.querySelectorAll('td');
+                
+                document.getElementById('editId').value = cells[0].textContent;
+                document.getElementById('editNik').value = cells[1].textContent;
+                document.getElementById('editNamaAnak').value = cells[2].textContent;
+                
+                // Convert date format from DD/MM/YYYY to YYYY-MM-DD
+                const dateParts = cells[3].textContent.split('/');
+                const formattedDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                document.getElementById('editTglLahir').value = formattedDate;
+                
+                document.getElementById('editAnakKe').value = cells[5].textContent;
+                document.getElementById('editJenisKelamin').value = cells[6].textContent;
+                document.getElementById('editNamaOrtu').value = cells[7].textContent;
+                
+                editDataModal.style.display = 'block';
+            });
+        });
+        
+        // Delete button functionality
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const row = this.closest('tr');
+                confirmModal.style.display = 'block';
+                
+                // Store the row to delete if confirmed
+                confirmYesBtn.onclick = function() {
+                    confirmModal.style.display = 'none';
+                    loadingOverlay.style.display = 'block';
+                    
+                    // Simulate loading
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        row.remove();
+                        
+                        // Update row numbers
+                        const rows = document.querySelectorAll('tbody tr');
+                        rows.forEach((row, index) => {
+                            row.cells[0].textContent = index + 1;
+                        });
+                        
+                        // Highlight duplicates
+                        highlightDuplicates();
+                        
+                        // Show success notification
+                        document.getElementById('notificationText').textContent = 'Data berhasil dihapus';
+                        notificationModal.style.display = 'block';
+                    }, 1000);
+                };
+            });
+        });
+        
+        // Confirm No button
+        confirmNoBtn.addEventListener('click', function() {
+            confirmModal.style.display = 'none';
+        });
+        
+        // Close modals
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                addDataModal.style.display = 'none';
+                editDataModal.style.display = 'none';
+                viewDataModal.style.display = 'none';
+                notificationModal.style.display = 'none';
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === addDataModal) {
+                addDataModal.style.display = 'none';
+            }
+            if (event.target === editDataModal) {
+                editDataModal.style.display = 'none';
+            }
+            if (event.target === viewDataModal) {
+                viewDataModal.style.display = 'none';
+            }
+            if (event.target === notificationModal) {
+                notificationModal.style.display = 'none';
+            }
+            if (event.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
+        
+        // Form submission for add data
+        document.getElementById('addDataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            loadingOverlay.style.display = 'block';
+            
+            // Simulate loading and then show success notification
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                
+                // Get form values
+                const nik = document.getElementById('nik').value;
+                const namaAnak = document.getElementById('namaAnak').value;
+                const tglLahir = document.getElementById('tglLahir').value;
+                const anakKe = document.getElementById('anakKe').value;
+                const jenisKelamin = document.getElementById('jenisKelamin').value;
+                const namaOrtu = document.getElementById('namaOrtu').value;
+                
+                // Get photo preview
+                const fotoInput = document.getElementById('fotoAnak');
+                let fotoSrc = 'https://via.placeholder.com/60';
+                
+                if (fotoInput.files && fotoInput.files[0]) {
+                    fotoSrc = URL.createObjectURL(fotoInput.files[0]);
+                }
+                
+                // Format date from YYYY-MM-DD to DD/MM/YYYY
+                const dateObj = new Date(tglLahir);
+                const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+                
+                // Calculate age
+                const usia = calculateAge(tglLahir);
+                
+                // Create new row
+                const tbody = document.querySelector('tbody');
+                const newRow = document.createElement('tr');
+                const rowNumber = tbody.querySelectorAll('tr').length + 1;
+                
+                newRow.innerHTML = `
+                    <td>${rowNumber}</td>
+                    <td>${nik}</td>
+                    <td>${namaAnak}</td>
+                    <td>${formattedDate}</td>
+                    <td>${usia}</td>
+                    <td>${anakKe}</td>
+                    <td>${jenisKelamin}</td>
+                    <td>${namaOrtu}</td>
+                    <td><img src="${fotoSrc}" class="photo-preview" alt="Foto Anak"></td>
+                    <td>
+                        <button class="action-btn view-btn">
+                            <i class="fas fa-eye"></i> Lihat
+                        </button>
+                        <button class="action-btn edit-btn">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(newRow);
+                
+                // Reset form and close modal
+                this.reset();
+                addDataModal.style.display = 'none';
+                
+                // Highlight duplicates
+                highlightDuplicates();
+                
+                // Show success notification
+                document.getElementById('notificationText').textContent = 'Data berhasil ditambahkan';
+                notificationModal.style.display = 'block';
+                
+                // Add event listeners to new buttons
+                addRowEventListeners(newRow);
+            }, 1000);
+        });
+        
+        // Form submission for edit data
+        document.getElementById('editDataForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            loadingOverlay.style.display = 'block';
+            
+            // Simulate loading and then show success notification
+            setTimeout(() => {
+                loadingOverlay.style.display = 'none';
+                
+                // Get form values
+                const id = document.getElementById('editId').value;
+                const nik = document.getElementById('editNik').value;
+                const namaAnak = document.getElementById('editNamaAnak').value;
+                const tglLahir = document.getElementById('editTglLahir').value;
+                const anakKe = document.getElementById('editAnakKe').value;
+                const jenisKelamin = document.getElementById('editJenisKelamin').value;
+                const namaOrtu = document.getElementById('editNamaOrtu').value;
+                
+                // Get photo preview if changed
+                const fotoInput = document.getElementById('editFotoAnak');
+                let fotoSrc = document.querySelector(`tbody tr:nth-child(${id}) td:nth-child(9) img`).src;
+                
+                if (fotoInput.files && fotoInput.files[0]) {
+                    fotoSrc = URL.createObjectURL(fotoInput.files[0]);
+                }
+                
+                // Format date from YYYY-MM-DD to DD/MM/YYYY
+                const dateObj = new Date(tglLahir);
+                const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
+                
+                // Calculate age
+                const usia = calculateAge(tglLahir);
+                
+                // Find the row to update
+                const rows = document.querySelectorAll('tbody tr');
+                const rowToUpdate = rows[id - 1];
+                
+                if (rowToUpdate) {
+                    const cells = rowToUpdate.querySelectorAll('td');
+                    cells[1].textContent = nik;
+                    cells[2].textContent = namaAnak;
+                    cells[3].textContent = formattedDate;
+                    cells[4].textContent = usia;
+                    cells[5].textContent = anakKe;
+                    cells[6].textContent = jenisKelamin;
+                    cells[7].textContent = namaOrtu;
+                    cells[8].querySelector('img').src = fotoSrc;
+                }
+                
+                // Close modal
+                editDataModal.style.display = 'none';
+                
+                // Highlight duplicates
+                highlightDuplicates();
+                
+                // Show success notification
+                document.getElementById('notificationText').textContent = 'Data berhasil diperbarui';
+                notificationModal.style.display = 'block';
+            }, 1000);
+        });
+        
+        // Function to add event listeners to new row buttons
+        function addRowEventListeners(row) {
+            row.querySelector('.view-btn').addEventListener('click', function() {
+                const cells = row.querySelectorAll('td');
+                
+                document.getElementById('viewNik').textContent = cells[1].textContent;
+                document.getElementById('viewNamaAnak').textContent = cells[2].textContent;
+                document.getElementById('viewTglLahir').textContent = cells[3].textContent;
+                document.getElementById('viewUsia').textContent = cells[4].textContent;
+                document.getElementById('viewAnakKe').textContent = cells[5].textContent;
+                document.getElementById('viewJenisKelamin').textContent = cells[6].textContent;
+                document.getElementById('viewNamaOrtu').textContent = cells[7].textContent;
+                document.getElementById('viewFotoAnak').src = cells[8].querySelector('img').src;
+                
+                viewDataModal.style.display = 'block';
+            });
+            
+            row.querySelector('.edit-btn').addEventListener('click', function() {
+                const cells = row.querySelectorAll('td');
+                
+                document.getElementById('editId').value = cells[0].textContent;
+                document.getElementById('editNik').value = cells[1].textContent;
+                document.getElementById('editNamaAnak').value = cells[2].textContent;
+                
+                // Convert date format from DD/MM/YYYY to YYYY-MM-DD
+                const dateParts = cells[3].textContent.split('/');
+                const formattedDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                document.getElementById('editTglLahir').value = formattedDate;
+                
+                document.getElementById('editAnakKe').value = cells[5].textContent;
+                document.getElementById('editJenisKelamin').value = cells[6].textContent;
+                document.getElementById('editNamaOrtu').value = cells[7].textContent;
+                
+                editDataModal.style.display = 'block';
+            });
+            
+            row.querySelector('.delete-btn').addEventListener('click', function() {
+                const row = this.closest('tr');
+                confirmModal.style.display = 'block';
+                
+                confirmYesBtn.onclick = function() {
+                    confirmModal.style.display = 'none';
+                    loadingOverlay.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                        row.remove();
+                        
+                        // Update row numbers
+                        const rows = document.querySelectorAll('tbody tr');
+                        rows.forEach((row, index) => {
+                            row.cells[0].textContent = index + 1;
+                        });
+                        
+                        // Highlight duplicates
+                        highlightDuplicates();
+                        
+                        document.getElementById('notificationText').textContent = 'Data berhasil dihapus';
+                        notificationModal.style.display = 'block';
+                    }, 1000);
+                };
+            });
+        }
+        
+        // Export to Excel functionality
+        exportBtn.addEventListener('click', function() {
+            // Get table data
+            const table = document.getElementById('dataTable');
+            const workbook = XLSX.utils.table_to_book(table);
+            
+            // Generate Excel file
+            XLSX.writeFile(workbook, 'Data_Anak_Balita.xlsx');
+        });
+        
+        // Print functionality
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Highlight duplicates on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            highlightDuplicates();
+        });
+    </script>
+</body>
+</html>
