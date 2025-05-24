@@ -404,6 +404,25 @@
             transform: translateY(-2px);
         }
         
+        /* Import Button */
+        .import-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .import-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
         /* Pagination */
         .pagination {
             display: flex;
@@ -535,6 +554,18 @@
         .cancel-btn {
             background-color: #6c757d;
             color: white;
+        }
+        
+        /* File Input */
+        .file-input-container {
+            position: relative;
+            margin-top: 5px;
+        }
+        
+        .file-input-info {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
         }
         
         /* Notification Modal */
@@ -828,6 +859,9 @@
                     <button id="addDataBtn" class="add-btn">
                         <i class="fas fa-plus"></i> Tambah Data
                     </button>
+                    <button id="importBtn" class="import-btn">
+                        <i class="fas fa-file-import"></i> Import Excel
+                    </button>
                     <button id="exportBtn" class="export-btn">
                         <i class="fas fa-file-excel"></i> Export Excel
                     </button>
@@ -852,128 +886,17 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>1234567890123456</td>
-                                <td>Budi Santoso</td>
-                                <td>15/01/2020</td>
-                                <td>4 tahun 5 bulan</td>
-                                <td>1</td>
-                                <td>Laki-laki</td>
-                                <td>Andi Wijaya</td>
-                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
-                                <td>
-                                    <button class="action-btn view-btn">
-                                        <i class="fas fa-eye"></i> Lihat
-                                    </button>
-                                    <button class="action-btn edit-btn">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="action-btn delete-btn">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>2345678901234567</td>
-                                <td>Ani Putri</td>
-                                <td>22/05/2019</td>
-                                <td>5 tahun 1 bulan</td>
-                                <td>2</td>
-                                <td>Perempuan</td>
-                                <td>Budi Hartono</td>
-                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
-                                <td>
-                                    <button class="action-btn view-btn">
-                                        <i class="fas fa-eye"></i> Lihat
-                                    </button>
-                                    <button class="action-btn edit-btn">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="action-btn delete-btn">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>3456789012345678</td>
-                                <td>Cici Permata</td>
-                                <td>10/11/2021</td>
-                                <td>2 tahun 7 bulan</td>
-                                <td>1</td>
-                                <td>Perempuan</td>
-                                <td>Dedi Kurniawan</td>
-                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
-                                <td>
-                                    <button class="action-btn view-btn">
-                                        <i class="fas fa-eye"></i> Lihat
-                                    </button>
-                                    <button class="action-btn edit-btn">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="action-btn delete-btn">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>4567890123456789</td>
-                                <td>Dodi Pratama</td>
-                                <td>03/03/2020</td>
-                                <td>4 tahun 3 bulan</td>
-                                <td>3</td>
-                                <td>Laki-laki</td>
-                                <td>Eka Putra</td>
-                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
-                                <td>
-                                    <button class="action-btn view-btn">
-                                        <i class="fas fa-eye"></i> Lihat
-                                    </button>
-                                    <button class="action-btn edit-btn">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="action-btn delete-btn">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>5678901234567890</td>
-                                <td>Eva Susanti</td>
-                                <td>18/07/2019</td>
-                                <td>5 tahun 0 bulan</td>
-                                <td>2</td>
-                                <td>Perempuan</td>
-                                <td>Fajar Nugraha</td>
-                                <td><img src="https://via.placeholder.com/60" class="photo-preview" alt="Foto Anak"></td>
-                                <td>
-                                    <button class="action-btn view-btn">
-                                        <i class="fas fa-eye"></i> Lihat
-                                    </button>
-                                    <button class="action-btn edit-btn">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </button>
-                                    <button class="action-btn delete-btn">
-                                        <i class="fas fa-trash"></i> Hapus
-                                    </button>
-                                </td>
-                            </tr>
+                        <tbody id="dataTableBody">
+                            <!-- Data will be loaded here -->
                         </tbody>
                     </table>
                 </div>
                 
                 <div class="pagination">
-                    <button class="page-btn">Previous</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <span class="page-info">Halaman 1 dari 3</span>
-                    <button class="page-btn">Next</button>
+                    <button class="page-btn" id="prevPage">Previous</button>
+                    <div id="pageNumbers" class="page-numbers"></div>
+                    <button class="page-btn" id="nextPage">Next</button>
+                    <span class="page-info" id="pageInfo">Halaman 1 dari 1</span>
                 </div>
             </div>
         </div>
@@ -1018,11 +941,40 @@
                     </div>
                     <div class="form-group">
                         <label for="fotoAnak">Foto Anak</label>
-                        <input type="file" id="fotoAnak" accept="image/*">
+                        <input type="file" id="fotoAnak" accept="image/jpeg, image/png, image/jpg">
+                        <div class="file-input-info">Maksimal 200KB (format: JPG, PNG, JPEG)</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
                         <button type="submit" class="action-btn save-btn">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Import Data Modal -->
+    <div id="importDataModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Data dari Excel</h3>
+                <span class="close-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="importDataForm">
+                    <div class="form-group">
+                        <label for="importFile">Pilih File Excel</label>
+                        <input type="file" id="importFile" accept=".xlsx, .xls" required>
+                        <div class="file-input-info">Format file harus Excel (.xlsx atau .xls)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="overwriteData"> Timpa data yang sudah ada
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
+                        <button type="submit" class="action-btn save-btn">Import Data</button>
                     </div>
                 </form>
             </div>
@@ -1069,7 +1021,8 @@
                     </div>
                     <div class="form-group">
                         <label for="editFotoAnak">Foto Anak</label>
-                        <input type="file" id="editFotoAnak" accept="image/*">
+                        <input type="file" id="editFotoAnak" accept="image/jpeg, image/png, image/jpg">
+                        <div class="file-input-info">Maksimal 200KB (format: JPG, PNG, JPEG)</div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="action-btn cancel-btn close-modal-btn">Batal</button>
@@ -1158,39 +1111,608 @@
     </div>
 
     <script>
-        // Toggle sidebar
-        document.querySelector('.nav-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            
-            sidebar.classList.toggle('sidebar-collapsed');
-            mainContent.classList.toggle('main-content-expanded');
+        // Data storage using localStorage
+        const STORAGE_KEY = 'anakBalitaData';
+        let currentPage = 1;
+        const rowsPerPage = 10;
+        let allData = [];
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+            highlightDuplicates();
+            renderTable();
         });
         
-        // Logout button functionality
-        document.querySelector('.logout-btn').addEventListener('click', function() {
-            if(confirm('Apakah Anda yakin ingin keluar?')) {
-                window.location.href = 'login.html';
+        // Load data from localStorage
+        function loadData() {
+            const savedData = localStorage.getItem(STORAGE_KEY);
+            if (savedData) {
+                allData = JSON.parse(savedData);
+            } else {
+                // Initialize with some sample data if none exists
+                allData = [
+                    {
+                        id: 1,
+                        nik: '1234567890123456',
+                        namaAnak: 'Budi Santoso',
+                        tglLahir: '2020-01-15',
+                        anakKe: 1,
+                        jenisKelamin: 'Laki-laki',
+                        namaOrtu: 'Andi Wijaya',
+                        foto: 'https://via.placeholder.com/60'
+                    },
+                    {
+                        id: 2,
+                        nik: '2345678901234567',
+                        namaAnak: 'Ani Putri',
+                        tglLahir: '2019-05-22',
+                        anakKe: 2,
+                        jenisKelamin: 'Perempuan',
+                        namaOrtu: 'Budi Hartono',
+                        foto: 'https://via.placeholder.com/60'
+                    },
+                    {
+                        id: 3,
+                        nik: '3456789012345678',
+                        namaAnak: 'Cici Permata',
+                        tglLahir: '2021-11-10',
+                        anakKe: 1,
+                        jenisKelamin: 'Perempuan',
+                        namaOrtu: 'Dedi Kurniawan',
+                        foto: 'https://via.placeholder.com/60'
+                    }
+                ];
+                saveData();
             }
-        });
+        }
         
-        // Rainbow text animation for menu items
-        document.querySelectorAll('.sidebar-menu li').forEach(item => {
-            item.addEventListener('mouseenter', function() {
-                const textSpan = this.querySelector('a span');
-                if (textSpan) {
-                    textSpan.style.animation = 'rainbowText 2s infinite';
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allData));
+            // Also save to a variable that can be accessed from penimbangan.html
+            localStorage.setItem('sharedAnakBalitaData', JSON.stringify(allData));
+        }
+        
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Toggle sidebar
+            document.querySelector('.nav-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                const sidebar = document.getElementById('sidebar');
+                const mainContent = document.getElementById('mainContent');
+                
+                sidebar.classList.toggle('sidebar-collapsed');
+                mainContent.classList.toggle('main-content-expanded');
+            });
+            
+            // Logout button functionality
+            document.querySelector('.logout-btn').addEventListener('click', function() {
+                if(confirm('Apakah Anda yakin ingin keluar?')) {
+                    window.location.href = 'login.html';
                 }
             });
             
-            item.addEventListener('mouseleave', function() {
-                const textSpan = this.querySelector('a span');
-                if (textSpan) {
-                    textSpan.style.animation = 'none';
+            // Rainbow text animation for menu items
+            document.querySelectorAll('.sidebar-menu li').forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    const textSpan = this.querySelector('a span');
+                    if (textSpan) {
+                        textSpan.style.animation = 'rainbowText 2s infinite';
+                    }
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    const textSpan = this.querySelector('a span');
+                    if (textSpan) {
+                        textSpan.style.animation = 'none';
+                    }
+                });
+            });
+            
+            // Modal functionality
+            const addDataBtn = document.getElementById('addDataBtn');
+            const importBtn = document.getElementById('importBtn');
+            const addDataModal = document.getElementById('addDataModal');
+            const importDataModal = document.getElementById('importDataModal');
+            const editDataModal = document.getElementById('editDataModal');
+            const viewDataModal = document.getElementById('viewDataModal');
+            const notificationModal = document.getElementById('notificationModal');
+            const confirmModal = document.getElementById('confirmModal');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const closeBtns = document.querySelectorAll('.close-btn, .close-modal-btn, .close-notification-btn');
+            const confirmYesBtn = document.getElementById('confirmYes');
+            const confirmNoBtn = document.getElementById('confirmNo');
+            const exportBtn = document.getElementById('exportBtn');
+            const printBtn = document.getElementById('printBtn');
+            const prevPageBtn = document.getElementById('prevPage');
+            const nextPageBtn = document.getElementById('nextPage');
+            
+            // Show add data modal
+            addDataBtn.addEventListener('click', function() {
+                document.getElementById('addDataForm').reset();
+                addDataModal.style.display = 'block';
+            });
+            
+            // Show import data modal
+            importBtn.addEventListener('click', function() {
+                document.getElementById('importDataForm').reset();
+                importDataModal.style.display = 'block';
+            });
+            
+            // Close modals
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    addDataModal.style.display = 'none';
+                    importDataModal.style.display = 'none';
+                    editDataModal.style.display = 'none';
+                    viewDataModal.style.display = 'none';
+                    notificationModal.style.display = 'none';
+                });
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === addDataModal) {
+                    addDataModal.style.display = 'none';
+                }
+                if (event.target === importDataModal) {
+                    importDataModal.style.display = 'none';
+                }
+                if (event.target === editDataModal) {
+                    editDataModal.style.display = 'none';
+                }
+                if (event.target === viewDataModal) {
+                    viewDataModal.style.display = 'none';
+                }
+                if (event.target === notificationModal) {
+                    notificationModal.style.display = 'none';
+                }
+                if (event.target === confirmModal) {
+                    confirmModal.style.display = 'none';
                 }
             });
-        });
+            
+            // Form submission for add data
+            document.getElementById('addDataForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate photo size
+                const fotoInput = document.getElementById('fotoAnak');
+                if (fotoInput.files && fotoInput.files[0]) {
+                    if (fotoInput.files[0].size > 200000) { // 200KB
+                        alert('Ukuran foto terlalu besar. Maksimal 200KB.');
+                        return;
+                    }
+                    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(fotoInput.files[0].type)) {
+                        alert('Format foto harus JPG, PNG, atau JPEG.');
+                        return;
+                    }
+                }
+                
+                // Show loading
+                loadingOverlay.style.display = 'block';
+                
+                // Simulate loading and then show success notification
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    // Get form values
+                    const nik = document.getElementById('nik').value;
+                    const namaAnak = document.getElementById('namaAnak').value;
+                    const tglLahir = document.getElementById('tglLahir').value;
+                    const anakKe = document.getElementById('anakKe').value;
+                    const jenisKelamin = document.getElementById('jenisKelamin').value;
+                    const namaOrtu = document.getElementById('namaOrtu').value;
+                    
+                    // Get photo preview
+                    let fotoSrc = 'https://via.placeholder.com/60';
+                    if (fotoInput.files && fotoInput.files[0]) {
+                        fotoSrc = URL.createObjectURL(fotoInput.files[0]);
+                    }
+                    
+                    // Create new data object
+                    const newId = allData.length > 0 ? Math.max(...allData.map(item => item.id)) + 1 : 1;
+                    const newData = {
+                        id: newId,
+                        nik,
+                        namaAnak,
+                        tglLahir,
+                        anakKe: parseInt(anakKe),
+                        jenisKelamin,
+                        namaOrtu,
+                        foto: fotoSrc
+                    };
+                    
+                    // Add to data array
+                    allData.push(newData);
+                    saveData();
+                    
+                    // Reset form and close modal
+                    this.reset();
+                    addDataModal.style.display = 'none';
+                    
+                    // Re-render table
+                    renderTable();
+                    
+                    // Highlight duplicates
+                    highlightDuplicates();
+                    
+                    // Show success notification
+                    showNotification('Data berhasil ditambahkan');
+                }, 500);
+            });
+            
+            // Form submission for import data
+            document.getElementById('importDataForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const fileInput = document.getElementById('importFile');
+                const overwriteData = document.getElementById('overwriteData').checked;
+                
+                if (!fileInput.files.length) {
+                    alert('Silakan pilih file Excel terlebih dahulu');
+                    return;
+                }
+                
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        
+                        // Get first sheet
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        
+                        // Convert to JSON
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                        
+                        // Process imported data
+                        processImportedData(jsonData, overwriteData);
+                    } catch (error) {
+                        console.error('Error reading Excel file:', error);
+                        showNotification('Gagal membaca file Excel', false);
+                    }
+                };
+                
+                reader.readAsArrayBuffer(file);
+            });
+            
+            // Form submission for edit data
+            document.getElementById('editDataForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate photo size
+                const fotoInput = document.getElementById('editFotoAnak');
+                if (fotoInput.files && fotoInput.files[0]) {
+                    if (fotoInput.files[0].size > 200000) { // 200KB
+                        alert('Ukuran foto terlalu besar. Maksimal 200KB.');
+                        return;
+                    }
+                    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(fotoInput.files[0].type)) {
+                        alert('Format foto harus JPG, PNG, atau JPEG.');
+                        return;
+                    }
+                }
+                
+                // Show loading
+                loadingOverlay.style.display = 'block';
+                
+                // Simulate loading and then show success notification
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                    
+                    // Get form values
+                    const id = parseInt(document.getElementById('editId').value);
+                    const nik = document.getElementById('editNik').value;
+                    const namaAnak = document.getElementById('editNamaAnak').value;
+                    const tglLahir = document.getElementById('editTglLahir').value;
+                    const anakKe = document.getElementById('editAnakKe').value;
+                    const jenisKelamin = document.getElementById('editJenisKelamin').value;
+                    const namaOrtu = document.getElementById('editNamaOrtu').value;
+                    
+                    // Get photo preview if changed
+                    let fotoSrc = allData.find(item => item.id === id).foto;
+                    if (fotoInput.files && fotoInput.files[0]) {
+                        fotoSrc = URL.createObjectURL(fotoInput.files[0]);
+                    }
+                    
+                    // Update data in array
+                    const index = allData.findIndex(item => item.id === id);
+                    if (index !== -1) {
+                        allData[index] = {
+                            id,
+                            nik,
+                            namaAnak,
+                            tglLahir,
+                            anakKe: parseInt(anakKe),
+                            jenisKelamin,
+                            namaOrtu,
+                            foto: fotoSrc
+                        };
+                        saveData();
+                    }
+                    
+                    // Close modal
+                    editDataModal.style.display = 'none';
+                    
+                    // Re-render table
+                    renderTable();
+                    
+                    // Highlight duplicates
+                    highlightDuplicates();
+                    
+                    // Show success notification
+                    showNotification('Data berhasil diperbarui');
+                }, 500);
+            });
+            
+            // Export to Excel functionality
+            exportBtn.addEventListener('click', function() {
+                // Prepare data for export
+                const exportData = allData.map(item => ({
+                    'No': item.id,
+                    'NIK': item.nik,
+                    'Nama Anak': item.namaAnak,
+                    'Tanggal Lahir': formatDateForDisplay(item.tglLahir),
+                    'Usia': calculateAge(item.tglLahir),
+                    'Anak Ke-': item.anakKe,
+                    'Jenis Kelamin': item.jenisKelamin,
+                    'Nama Orang Tua': item.namaOrtu
+                }));
+                
+                // Create worksheet
+                const ws = XLSX.utils.json_to_sheet(exportData);
+                
+                // Create workbook
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Data Anak Balita');
+                
+                // Generate Excel file
+                XLSX.writeFile(wb, 'Data_Anak_Balita.xlsx');
+            });
+            
+            // Print functionality
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Pagination buttons
+            prevPageBtn.addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            nextPageBtn.addEventListener('click', function() {
+                const totalPages = Math.ceil(allData.length / rowsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+        }
+        
+        // Process imported Excel data
+        function processImportedData(importedData, overwrite) {
+            if (!Array.isArray(importedData) || importedData.length === 0) {
+                showNotification('Tidak ada data yang valid ditemukan', false);
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'block';
+            
+            setTimeout(() => {
+                try {
+                    const newData = [];
+                    
+                    // Process each row
+                    importedData.forEach((row, index) => {
+                        // Skip if required fields are missing
+                        if (!row['NIK'] || !row['Nama Anak'] || !row['Tanggal Lahir']) {
+                            console.warn(`Skipping row ${index + 1} - missing required fields`);
+                            return;
+                        }
+                        
+                        // Convert date format if needed
+                        let birthDate = row['Tanggal Lahir'];
+                        if (typeof birthDate === 'number') {
+                            // Excel date serial number
+                            birthDate = XLSX.SSF.format('yyyy-mm-dd', birthDate);
+                        } else if (birthDate.includes('/')) {
+                            // Convert from DD/MM/YYYY to YYYY-MM-DD
+                            const parts = birthDate.split('/');
+                            if (parts.length === 3) {
+                                birthDate = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                            }
+                        }
+                        
+                        // Create new data object
+                        const newId = allData.length > 0 ? Math.max(...allData.map(item => item.id)) + 1 + index : 1 + index;
+                        const newItem = {
+                            id: newId,
+                            nik: String(row['NIK']),
+                            namaAnak: row['Nama Anak'],
+                            tglLahir: birthDate,
+                            anakKe: parseInt(row['Anak Ke-'] || 1),
+                            jenisKelamin: row['Jenis Kelamin'] || 'Laki-laki',
+                            namaOrtu: row['Nama Orang Tua'] || '',
+                            foto: 'https://via.placeholder.com/60'
+                        };
+                        
+                        newData.push(newItem);
+                    });
+                    
+                    if (overwrite) {
+                        allData = newData;
+                    } else {
+                        allData = [...allData, ...newData];
+                    }
+                    
+                    saveData();
+                    renderTable();
+                    highlightDuplicates();
+                    
+                    document.getElementById('importDataModal').style.display = 'none';
+                    showNotification(`Berhasil mengimpor ${newData.length} data anak`);
+                } catch (error) {
+                    console.error('Error processing imported data:', error);
+                    showNotification('Gagal memproses data yang diimpor', false);
+                } finally {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                }
+            }, 500);
+        }
+        
+        // Render table with pagination
+        function renderTable() {
+            const tbody = document.getElementById('dataTableBody');
+            tbody.innerHTML = '';
+            
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = Math.min(startIndex + rowsPerPage, allData.length);
+            const pageData = allData.slice(startIndex, endIndex);
+            
+            // Populate table
+            pageData.forEach((data, index) => {
+                const row = document.createElement('tr');
+                const rowNumber = startIndex + index + 1;
+                
+                row.innerHTML = `
+                    <td>${rowNumber}</td>
+                    <td>${data.nik}</td>
+                    <td>${data.namaAnak}</td>
+                    <td>${formatDateForDisplay(data.tglLahir)}</td>
+                    <td>${calculateAge(data.tglLahir)}</td>
+                    <td>${data.anakKe}</td>
+                    <td>${data.jenisKelamin}</td>
+                    <td>${data.namaOrtu}</td>
+                    <td><img src="${data.foto}" class="photo-preview" alt="Foto ${data.namaAnak}"></td>
+                    <td>
+                        <button class="action-btn view-btn" data-id="${data.id}">
+                            <i class="fas fa-eye"></i> Lihat
+                        </button>
+                        <button class="action-btn edit-btn" data-id="${data.id}">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="action-btn delete-btn" data-id="${data.id}">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+            
+            // Add event listeners to buttons
+            addTableEventListeners();
+            
+            // Update pagination info
+            updatePaginationInfo();
+        }
+        
+        // Add event listeners to table buttons
+        function addTableEventListeners() {
+            // View buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const data = allData.find(item => item.id === id);
+                    
+                    if (data) {
+                        document.getElementById('viewNik').textContent = data.nik;
+                        document.getElementById('viewNamaAnak').textContent = data.namaAnak;
+                        document.getElementById('viewTglLahir').textContent = formatDateForDisplay(data.tglLahir);
+                        document.getElementById('viewUsia').textContent = calculateAge(data.tglLahir);
+                        document.getElementById('viewAnakKe').textContent = data.anakKe;
+                        document.getElementById('viewJenisKelamin').textContent = data.jenisKelamin;
+                        document.getElementById('viewNamaOrtu').textContent = data.namaOrtu;
+                        document.getElementById('viewFotoAnak').src = data.foto;
+                        
+                        document.getElementById('viewDataModal').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Edit buttons
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const data = allData.find(item => item.id === id);
+                    
+                    if (data) {
+                        document.getElementById('editId').value = data.id;
+                        document.getElementById('editNik').value = data.nik;
+                        document.getElementById('editNamaAnak').value = data.namaAnak;
+                        document.getElementById('editTglLahir').value = data.tglLahir;
+                        document.getElementById('editAnakKe').value = data.anakKe;
+                        document.getElementById('editJenisKelamin').value = data.jenisKelamin;
+                        document.getElementById('editNamaOrtu').value = data.namaOrtu;
+                        
+                        document.getElementById('editDataModal').style.display = 'block';
+                    }
+                });
+            });
+            
+            // Delete buttons
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    const row = this.closest('tr');
+                    
+                    document.getElementById('confirmModal').style.display = 'block';
+                    
+                    // Store the row to delete if confirmed
+                    document.getElementById('confirmYes').onclick = function() {
+                        document.getElementById('confirmModal').style.display = 'none';
+                        document.getElementById('loadingOverlay').style.display = 'block';
+                        
+                        setTimeout(() => {
+                            // Remove from data array
+                            allData = allData.filter(item => item.id !== id);
+                            saveData();
+                            
+                            // Re-render table
+                            renderTable();
+                            
+                            document.getElementById('loadingOverlay').style.display = 'none';
+                            showNotification('Data berhasil dihapus');
+                        }, 500);
+                    };
+                });
+            });
+        }
+        
+        // Update pagination information
+        function updatePaginationInfo() {
+            const totalPages = Math.ceil(allData.length / rowsPerPage);
+            document.getElementById('pageInfo').textContent = `Halaman ${currentPage} dari ${totalPages}`;
+            
+            // Disable/enable pagination buttons
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+            
+            // Update page numbers
+            const pageNumbersContainer = document.getElementById('pageNumbers');
+            pageNumbersContainer.innerHTML = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable();
+                });
+                pageNumbersContainer.appendChild(pageBtn);
+            }
+        }
         
         // Function to calculate age from birth date
         function calculateAge(birthDate) {
@@ -1212,397 +1734,66 @@
             return `${years} tahun ${months} bulan`;
         }
         
-        // Function to highlight duplicate names and parents
+        // Format date for display (DD/MM/YYYY)
+        function formatDateForDisplay(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+        
+        // Highlight duplicate names and parents
         function highlightDuplicates() {
             const rows = document.querySelectorAll('#dataTable tbody tr');
             const nameCount = {};
             const parentCount = {};
             
             // Count occurrences of names and parents
-            rows.forEach(row => {
-                const name = row.cells[2].textContent.trim();
-                const parent = row.cells[7].textContent.trim();
-                
-                nameCount[name] = (nameCount[name] || 0) + 1;
-                parentCount[parent] = (parentCount[parent] || 0) + 1;
+            allData.forEach(data => {
+                nameCount[data.namaAnak] = (nameCount[data.namaAnak] || 0) + 1;
+                parentCount[data.namaOrtu] = (parentCount[data.namaOrtu] || 0) + 1;
             });
             
             // Apply highlighting
             rows.forEach(row => {
-                const name = row.cells[2].textContent.trim();
-                const parent = row.cells[7].textContent.trim();
+                const nameCell = row.cells[2];
+                const parentCell = row.cells[7];
+                const name = nameCell.textContent.trim();
+                const parent = parentCell.textContent.trim();
                 
                 // Reset classes
-                row.cells[2].classList.remove('duplicate-name');
-                row.cells[7].classList.remove('duplicate-parent');
+                nameCell.classList.remove('duplicate-name');
+                parentCell.classList.remove('duplicate-parent');
                 
                 // Apply classes if duplicates found
                 if (nameCount[name] > 1) {
-                    row.cells[2].classList.add('duplicate-name');
+                    nameCell.classList.add('duplicate-name');
                 }
                 if (parentCount[parent] > 1) {
-                    row.cells[7].classList.add('duplicate-parent');
+                    parentCell.classList.add('duplicate-parent');
                 }
             });
         }
         
-        // Modal functionality
-        const addDataBtn = document.getElementById('addDataBtn');
-        const addDataModal = document.getElementById('addDataModal');
-        const editDataModal = document.getElementById('editDataModal');
-        const viewDataModal = document.getElementById('viewDataModal');
-        const notificationModal = document.getElementById('notificationModal');
-        const confirmModal = document.getElementById('confirmModal');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const closeBtns = document.querySelectorAll('.close-btn, .close-modal-btn, .close-notification-btn');
-        const viewBtns = document.querySelectorAll('.view-btn');
-        const editBtns = document.querySelectorAll('.edit-btn');
-        const deleteBtns = document.querySelectorAll('.delete-btn');
-        const confirmYesBtn = document.getElementById('confirmYes');
-        const confirmNoBtn = document.getElementById('confirmNo');
-        const exportBtn = document.getElementById('exportBtn');
-        const printBtn = document.getElementById('printBtn');
-        
-        // Show add data modal
-        addDataBtn.addEventListener('click', function() {
-            addDataModal.style.display = 'block';
-        });
-        
-        // Show view data modal
-        viewBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const cells = row.querySelectorAll('td');
-                
-                document.getElementById('viewNik').textContent = cells[1].textContent;
-                document.getElementById('viewNamaAnak').textContent = cells[2].textContent;
-                document.getElementById('viewTglLahir').textContent = cells[3].textContent;
-                document.getElementById('viewUsia').textContent = cells[4].textContent;
-                document.getElementById('viewAnakKe').textContent = cells[5].textContent;
-                document.getElementById('viewJenisKelamin').textContent = cells[6].textContent;
-                document.getElementById('viewNamaOrtu').textContent = cells[7].textContent;
-                document.getElementById('viewFotoAnak').src = cells[8].querySelector('img').src;
-                
-                viewDataModal.style.display = 'block';
-            });
-        });
-        
-        // Show edit data modal
-        editBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const cells = row.querySelectorAll('td');
-                
-                document.getElementById('editId').value = cells[0].textContent;
-                document.getElementById('editNik').value = cells[1].textContent;
-                document.getElementById('editNamaAnak').value = cells[2].textContent;
-                
-                // Convert date format from DD/MM/YYYY to YYYY-MM-DD
-                const dateParts = cells[3].textContent.split('/');
-                const formattedDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
-                document.getElementById('editTglLahir').value = formattedDate;
-                
-                document.getElementById('editAnakKe').value = cells[5].textContent;
-                document.getElementById('editJenisKelamin').value = cells[6].textContent;
-                document.getElementById('editNamaOrtu').value = cells[7].textContent;
-                
-                editDataModal.style.display = 'block';
-            });
-        });
-        
-        // Delete button functionality
-        deleteBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const row = this.closest('tr');
-                confirmModal.style.display = 'block';
-                
-                // Store the row to delete if confirmed
-                confirmYesBtn.onclick = function() {
-                    confirmModal.style.display = 'none';
-                    loadingOverlay.style.display = 'block';
-                    
-                    // Simulate loading
-                    setTimeout(() => {
-                        loadingOverlay.style.display = 'none';
-                        row.remove();
-                        
-                        // Update row numbers
-                        const rows = document.querySelectorAll('tbody tr');
-                        rows.forEach((row, index) => {
-                            row.cells[0].textContent = index + 1;
-                        });
-                        
-                        // Highlight duplicates
-                        highlightDuplicates();
-                        
-                        // Show success notification
-                        document.getElementById('notificationText').textContent = 'Data berhasil dihapus';
-                        notificationModal.style.display = 'block';
-                    }, 1000);
-                };
-            });
-        });
-        
-        // Confirm No button
-        confirmNoBtn.addEventListener('click', function() {
-            confirmModal.style.display = 'none';
-        });
-        
-        // Close modals
-        closeBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                addDataModal.style.display = 'none';
-                editDataModal.style.display = 'none';
-                viewDataModal.style.display = 'none';
-                notificationModal.style.display = 'none';
-            });
-        });
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === addDataModal) {
-                addDataModal.style.display = 'none';
+        // Show notification
+        function showNotification(message, isSuccess = true) {
+            const notificationModal = document.getElementById('notificationModal');
+            const notificationText = document.getElementById('notificationText');
+            const checkmark = document.querySelector('.checkmark');
+            
+            notificationText.textContent = message;
+            
+            if (isSuccess) {
+                checkmark.style.backgroundColor = '#28a745';
+                checkmark.style.display = 'inline-block';
+            } else {
+                checkmark.style.backgroundColor = '#dc3545';
+                checkmark.style.display = 'inline-block';
             }
-            if (event.target === editDataModal) {
-                editDataModal.style.display = 'none';
-            }
-            if (event.target === viewDataModal) {
-                viewDataModal.style.display = 'none';
-            }
-            if (event.target === notificationModal) {
-                notificationModal.style.display = 'none';
-            }
-            if (event.target === confirmModal) {
-                confirmModal.style.display = 'none';
-            }
-        });
-        
-        // Form submission for add data
-        document.getElementById('addDataForm').addEventListener('submit', function(e) {
-            e.preventDefault();
             
-            // Show loading
-            loadingOverlay.style.display = 'block';
-            
-            // Simulate loading and then show success notification
-            setTimeout(() => {
-                loadingOverlay.style.display = 'none';
-                
-                // Get form values
-                const nik = document.getElementById('nik').value;
-                const namaAnak = document.getElementById('namaAnak').value;
-                const tglLahir = document.getElementById('tglLahir').value;
-                const anakKe = document.getElementById('anakKe').value;
-                const jenisKelamin = document.getElementById('jenisKelamin').value;
-                const namaOrtu = document.getElementById('namaOrtu').value;
-                
-                // Get photo preview
-                const fotoInput = document.getElementById('fotoAnak');
-                let fotoSrc = 'https://via.placeholder.com/60';
-                
-                if (fotoInput.files && fotoInput.files[0]) {
-                    fotoSrc = URL.createObjectURL(fotoInput.files[0]);
-                }
-                
-                // Format date from YYYY-MM-DD to DD/MM/YYYY
-                const dateObj = new Date(tglLahir);
-                const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
-                
-                // Calculate age
-                const usia = calculateAge(tglLahir);
-                
-                // Create new row
-                const tbody = document.querySelector('tbody');
-                const newRow = document.createElement('tr');
-                const rowNumber = tbody.querySelectorAll('tr').length + 1;
-                
-                newRow.innerHTML = `
-                    <td>${rowNumber}</td>
-                    <td>${nik}</td>
-                    <td>${namaAnak}</td>
-                    <td>${formattedDate}</td>
-                    <td>${usia}</td>
-                    <td>${anakKe}</td>
-                    <td>${jenisKelamin}</td>
-                    <td>${namaOrtu}</td>
-                    <td><img src="${fotoSrc}" class="photo-preview" alt="Foto Anak"></td>
-                    <td>
-                        <button class="action-btn view-btn">
-                            <i class="fas fa-eye"></i> Lihat
-                        </button>
-                        <button class="action-btn edit-btn">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="action-btn delete-btn">
-                            <i class="fas fa-trash"></i> Hapus
-                        </button>
-                    </td>
-                `;
-                
-                tbody.appendChild(newRow);
-                
-                // Reset form and close modal
-                this.reset();
-                addDataModal.style.display = 'none';
-                
-                // Highlight duplicates
-                highlightDuplicates();
-                
-                // Show success notification
-                document.getElementById('notificationText').textContent = 'Data berhasil ditambahkan';
-                notificationModal.style.display = 'block';
-                
-                // Add event listeners to new buttons
-                addRowEventListeners(newRow);
-            }, 1000);
-        });
-        
-        // Form submission for edit data
-        document.getElementById('editDataForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show loading
-            loadingOverlay.style.display = 'block';
-            
-            // Simulate loading and then show success notification
-            setTimeout(() => {
-                loadingOverlay.style.display = 'none';
-                
-                // Get form values
-                const id = document.getElementById('editId').value;
-                const nik = document.getElementById('editNik').value;
-                const namaAnak = document.getElementById('editNamaAnak').value;
-                const tglLahir = document.getElementById('editTglLahir').value;
-                const anakKe = document.getElementById('editAnakKe').value;
-                const jenisKelamin = document.getElementById('editJenisKelamin').value;
-                const namaOrtu = document.getElementById('editNamaOrtu').value;
-                
-                // Get photo preview if changed
-                const fotoInput = document.getElementById('editFotoAnak');
-                let fotoSrc = document.querySelector(`tbody tr:nth-child(${id}) td:nth-child(9) img`).src;
-                
-                if (fotoInput.files && fotoInput.files[0]) {
-                    fotoSrc = URL.createObjectURL(fotoInput.files[0]);
-                }
-                
-                // Format date from YYYY-MM-DD to DD/MM/YYYY
-                const dateObj = new Date(tglLahir);
-                const formattedDate = `${dateObj.getDate().toString().padStart(2, '0')}/${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getFullYear()}`;
-                
-                // Calculate age
-                const usia = calculateAge(tglLahir);
-                
-                // Find the row to update
-                const rows = document.querySelectorAll('tbody tr');
-                const rowToUpdate = rows[id - 1];
-                
-                if (rowToUpdate) {
-                    const cells = rowToUpdate.querySelectorAll('td');
-                    cells[1].textContent = nik;
-                    cells[2].textContent = namaAnak;
-                    cells[3].textContent = formattedDate;
-                    cells[4].textContent = usia;
-                    cells[5].textContent = anakKe;
-                    cells[6].textContent = jenisKelamin;
-                    cells[7].textContent = namaOrtu;
-                    cells[8].querySelector('img').src = fotoSrc;
-                }
-                
-                // Close modal
-                editDataModal.style.display = 'none';
-                
-                // Highlight duplicates
-                highlightDuplicates();
-                
-                // Show success notification
-                document.getElementById('notificationText').textContent = 'Data berhasil diperbarui';
-                notificationModal.style.display = 'block';
-            }, 1000);
-        });
-        
-        // Function to add event listeners to new row buttons
-        function addRowEventListeners(row) {
-            row.querySelector('.view-btn').addEventListener('click', function() {
-                const cells = row.querySelectorAll('td');
-                
-                document.getElementById('viewNik').textContent = cells[1].textContent;
-                document.getElementById('viewNamaAnak').textContent = cells[2].textContent;
-                document.getElementById('viewTglLahir').textContent = cells[3].textContent;
-                document.getElementById('viewUsia').textContent = cells[4].textContent;
-                document.getElementById('viewAnakKe').textContent = cells[5].textContent;
-                document.getElementById('viewJenisKelamin').textContent = cells[6].textContent;
-                document.getElementById('viewNamaOrtu').textContent = cells[7].textContent;
-                document.getElementById('viewFotoAnak').src = cells[8].querySelector('img').src;
-                
-                viewDataModal.style.display = 'block';
-            });
-            
-            row.querySelector('.edit-btn').addEventListener('click', function() {
-                const cells = row.querySelectorAll('td');
-                
-                document.getElementById('editId').value = cells[0].textContent;
-                document.getElementById('editNik').value = cells[1].textContent;
-                document.getElementById('editNamaAnak').value = cells[2].textContent;
-                
-                // Convert date format from DD/MM/YYYY to YYYY-MM-DD
-                const dateParts = cells[3].textContent.split('/');
-                const formattedDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
-                document.getElementById('editTglLahir').value = formattedDate;
-                
-                document.getElementById('editAnakKe').value = cells[5].textContent;
-                document.getElementById('editJenisKelamin').value = cells[6].textContent;
-                document.getElementById('editNamaOrtu').value = cells[7].textContent;
-                
-                editDataModal.style.display = 'block';
-            });
-            
-            row.querySelector('.delete-btn').addEventListener('click', function() {
-                const row = this.closest('tr');
-                confirmModal.style.display = 'block';
-                
-                confirmYesBtn.onclick = function() {
-                    confirmModal.style.display = 'none';
-                    loadingOverlay.style.display = 'block';
-                    
-                    setTimeout(() => {
-                        loadingOverlay.style.display = 'none';
-                        row.remove();
-                        
-                        // Update row numbers
-                        const rows = document.querySelectorAll('tbody tr');
-                        rows.forEach((row, index) => {
-                            row.cells[0].textContent = index + 1;
-                        });
-                        
-                        // Highlight duplicates
-                        highlightDuplicates();
-                        
-                        document.getElementById('notificationText').textContent = 'Data berhasil dihapus';
-                        notificationModal.style.display = 'block';
-                    }, 1000);
-                };
-            });
+            notificationModal.style.display = 'block';
         }
-        
-        // Export to Excel functionality
-        exportBtn.addEventListener('click', function() {
-            // Get table data
-            const table = document.getElementById('dataTable');
-            const workbook = XLSX.utils.table_to_book(table);
-            
-            // Generate Excel file
-            XLSX.writeFile(workbook, 'Data_Anak_Balita.xlsx');
-        });
-        
-        // Print functionality
-        printBtn.addEventListener('click', function() {
-            window.print();
-        });
-        
-        // Highlight duplicates on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            highlightDuplicates();
-        });
     </script>
 </body>
 </html>
